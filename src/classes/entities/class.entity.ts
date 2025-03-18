@@ -1,9 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from "typeorm";
 
 @Entity("class")
 export class Class {
 	@PrimaryGeneratedColumn("uuid")
-	id: number;
+	id: string;
 
 	@Column()
 	schedule: Date;
@@ -14,9 +20,9 @@ export class Class {
 	@Column()
 	description: string;
 
-	@Column()
+	@CreateDateColumn()
 	createdAt: Date;
 
-	@Column()
+	@UpdateDateColumn()
 	modifiedAt: Date;
 }
