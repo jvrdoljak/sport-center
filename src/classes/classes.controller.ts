@@ -4,8 +4,8 @@ import {
 	Delete,
 	Get,
 	Param,
-	Patch,
 	Post,
+	Put
 } from "@nestjs/common";
 import { ClassesService } from "./classes.service";
 import { CreateClassDto } from "./dto/createClass.dto";
@@ -42,7 +42,7 @@ export class ClassesController {
 	/**
 	 * updateOne
 	 */
-	@Patch(":id")
+	@Put(":id")
 	updateOne(@Param("id") id: string, @Body() updateClassDto: UpdateClassDto) {
 		return this.classesService.updateOne(id, updateClassDto);
 	}

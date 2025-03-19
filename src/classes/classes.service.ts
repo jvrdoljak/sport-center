@@ -50,7 +50,6 @@ export class ClassesService {
 		}
 
 		Object.assign(existingClass, updateClassDto);
-
 		return await this.classesRepository.save(existingClass);
 	}
 
