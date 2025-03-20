@@ -41,12 +41,16 @@ import { UsersModule } from "./users/users.module";
 		EnrollmentsModule,
 	],
 	controllers: [AppController],
-	providers: [AppService,  {
-		provide: APP_GUARD,
-		useClass: JwtAuthGuard,
-	  },{
-		provide: APP_GUARD,
-		useClass: RolesGuard,
-	  },],
+	providers: [
+		AppService,
+		{
+			provide: APP_GUARD,
+			useClass: JwtAuthGuard,
+		},
+		{
+			provide: APP_GUARD,
+			useClass: RolesGuard,
+		},
+	],
 })
 export class AppModule {}

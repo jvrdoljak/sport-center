@@ -6,7 +6,7 @@ import {
 	Param,
 	Post,
 	Put,
-	UseGuards
+	UseGuards,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { Roles } from "src/common/decorators/roles.decorator";
