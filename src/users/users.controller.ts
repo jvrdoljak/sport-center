@@ -7,6 +7,7 @@ import {
 	Post,
 	Put,
 } from "@nestjs/common";
+import { Role } from "src/enums/role";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { UsersService } from "./users.service";
@@ -32,11 +33,19 @@ export class UsersController {
 	}
 
 	/**
-	 * createOne
+	 * createuser
 	 */
-	@Post()
-	createOne(@Body() user: CreateUserDto) {
+	@Post('create-user')
+	createUser(@Body() user: CreateUserDto) {
 		return this.usersService.createOne(user);
+	}
+
+	/**
+	 * createAdmin
+	 */
+	@Post('create-admin')
+	createAdmin(@Body() user: CreateUserDto) {
+		return this.usersService.createOne(user, Role.Admin);
 	}
 
 	/**

@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
+import { Role } from "src/enums/role";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
@@ -39,7 +40,10 @@ export class UsersService {
 	/**
 	 * createOne
 	 */
-	async createOne(createUserDto: CreateUserDto): Promise<User> {
+	async createOne(
+		createUserDto: CreateUserDto,
+		role: Role = Role.User,
+	): Promise<User> {
 		const existingUser = await this.usersRepository.findOne({
 			where: { email: createUserDto.email },
 		});
@@ -53,6 +57,7 @@ export class UsersService {
 		const user = this.usersRepository.create({
 			...createUserDto,
 			password: hashedPassword,
+			role,
 		});
 
 		return this.usersRepository.save(user);
