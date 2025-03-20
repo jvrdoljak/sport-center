@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
-import { Role } from "src/enums/role";
+import { Role } from "src/common/enums/role";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
@@ -22,19 +22,28 @@ export class UsersService {
 	 * findAll
 	 */
 	async findAll(): Promise<Array<User>> {
-		return await this.usersRepository.find();
+		return await this.usersRepository.find({
+			relations: ["enrollments"],
+		});
 	}
 
 	/**
 	 * findOne
 	 */
 	async findOne(id: string): Promise<User> {
-		const user = await this.usersRepository.findOneBy({ id });
+		const user = await this.usersRepository.findOne({
+			where: { id },
+			relations: ["enrollments"],
+		});
 		if (!user) {
 			throw new NotFoundException(`User with ID ${id} not found`);
 		}
 
 		return user;
+	}
+
+	async findByEmail(email: string): Promise<User | null> {
+		return await this.usersRepository.findOne({ where: { email } });
 	}
 
 	/**

@@ -1,8 +1,10 @@
-import { Role } from "src/enums/role";
+import { Role } from "src/common/enums/role";
+import { Enrollment } from "src/enrollments/entities/enrollment.entity";
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
@@ -20,6 +22,9 @@ export class User {
 
 	@Column()
 	role: Role;
+
+	@OneToMany(() => Enrollment, (enrollment) => enrollment.user)
+	enrollments: Enrollment[];
 
 	@CreateDateColumn()
 	createdAt: Date;

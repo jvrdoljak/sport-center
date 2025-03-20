@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	ConflictException,
 	Injectable,
 	NotFoundException,
@@ -17,11 +18,16 @@ export class SportsService {
 	) {}
 
 	async findAll(): Promise<Array<Sport>> {
-		return await this.sportRepository.find();
+		return await this.sportRepository.find({
+			relations: ["classes"],
+		});
 	}
 
 	async findOne(id: string): Promise<Sport> {
-		const sport = await this.sportRepository.findOneBy({ id });
+		const sport = await this.sportRepository.findOne({
+			where: { id },
+			relations: ["classes"],
+		});
 
 		if (!sport) {
 			throw new NotFoundException(`Sport with ID: ${id} is not found`);
@@ -59,6 +65,16 @@ export class SportsService {
 	}
 
 	async deleteOne(id: string): Promise<void> {
+		const sport = await this.findOne(id);
+
+		if (!sport) {
+			throw new NotFoundException(`Sport with ID ${id} not found`);
+		}
+
+		if (sport.classes.length > 0) {
+			throw new BadRequestException(`Sport with ID: ${id} has active classes.`);
+		}
+
 		const result = await this.sportRepository.delete({ id });
 
 		if (result.affected === 0) {

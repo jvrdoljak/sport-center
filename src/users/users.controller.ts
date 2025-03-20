@@ -6,8 +6,12 @@ import {
 	Param,
 	Post,
 	Put,
+	UseGuards
 } from "@nestjs/common";
-import { Role } from "src/enums/role";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { Roles } from "src/common/decorators/roles.decorator";
+import { Role } from "src/common/enums/role";
+import { RolesGuard } from "src/common/guards/roles.guard";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";
 import { UsersService } from "./users.service";
@@ -20,6 +24,8 @@ export class UsersController {
 	 * findAll
 	 */
 	@Get()
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.User)
 	findAll() {
 		return this.usersService.findAll();
 	}
@@ -28,6 +34,7 @@ export class UsersController {
 	 * findOne
 	 */
 	@Get(":id")
+	@UseGuards(JwtAuthGuard)
 	findOne(@Param("id") id: string) {
 		return this.usersService.findOne(id);
 	}
@@ -35,7 +42,7 @@ export class UsersController {
 	/**
 	 * createuser
 	 */
-	@Post('create-user')
+	@Post("create-user")
 	createUser(@Body() user: CreateUserDto) {
 		return this.usersService.createOne(user);
 	}
@@ -43,7 +50,8 @@ export class UsersController {
 	/**
 	 * createAdmin
 	 */
-	@Post('create-admin')
+	@Post("create-admin")
+	@UseGuards(JwtAuthGuard)
 	createAdmin(@Body() user: CreateUserDto) {
 		return this.usersService.createOne(user, Role.Admin);
 	}
@@ -52,6 +60,7 @@ export class UsersController {
 	 * updateOne
 	 */
 	@Put(":id")
+	@UseGuards(JwtAuthGuard)
 	updateOne(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
 		return this.usersService.updateOne(id, updateUserDto);
 	}
@@ -60,6 +69,8 @@ export class UsersController {
 	 * deleteOne
 	 */
 	@Delete(":id")
+	@UseGuards(JwtAuthGuard)
+	@Roles(Role.Admin)
 	deleteOne(@Param("id") id: string) {
 		return this.usersService.deleteOne(id);
 	}

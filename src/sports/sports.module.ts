@@ -6,7 +6,7 @@ import { SportsService } from "./sports.service";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Sport])],
-	exports: [TypeOrmModule],
+	exports: [TypeOrmModule, SportsService],
 	controllers: [SportsController],
 	providers: [SportsService],
 })

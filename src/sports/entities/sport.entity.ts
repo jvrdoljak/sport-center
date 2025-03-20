@@ -1,7 +1,9 @@
+import { Class } from "src/classes/entities/class.entity";
 import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
@@ -13,6 +15,9 @@ export class Sport {
 
 	@Column({ unique: true })
 	name: string;
+
+	@OneToMany(() => Class, (sportClass) => sportClass.sport)
+	classes: Class[];
 
 	@CreateDateColumn()
 	createdAt: Date;

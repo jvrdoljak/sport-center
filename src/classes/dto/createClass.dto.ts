@@ -1,9 +1,8 @@
-import { IsDate, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class CreateClassDto {
 	@IsNotEmpty()
-	@IsDate()
-	schedule: Date;
+	schedule: string;
 
 	@IsNotEmpty()
 	durationMins: number;
@@ -11,4 +10,11 @@ export class CreateClassDto {
 	@IsNotEmpty()
 	@IsString()
 	description: string;
+
+	@IsNotEmpty()
+	@IsUUID()
+	sportId: string;
+
+	@IsNotEmpty()
+	capacity: number;
 }

@@ -1,17 +1,22 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { APP_GUARD } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
+import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { ClassesModule } from "./classes/classes.module";
-import { UsersModule } from "./users/users.module";
+import { RolesGuard } from "./common/guards/roles.guard";
+import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { SportsModule } from "./sports/sports.module";
+import { UsersModule } from "./users/users.module";
 
 @Module({
 	imports: [
-		ClassesModule,
-		UsersModule,
-		AuthModule,
+		ConfigModule.forRoot({
+			isGlobal: true,
+		}),
 		TypeOrmModule.forRootAsync({
 			useFactory: () => ({
 				type: "mysql",
@@ -26,11 +31,22 @@ import { SportsModule } from "./sports/sports.module";
 				cli: {
 					migrationsDir: "src/migrations",
 				},
+				autoLoadEntities: true,
 			}),
 		}),
+		ClassesModule,
+		UsersModule,
+		AuthModule,
 		SportsModule,
+		EnrollmentsModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [AppService,  {
+		provide: APP_GUARD,
+		useClass: JwtAuthGuard,
+	  },{
+		provide: APP_GUARD,
+		useClass: RolesGuard,
+	  },],
 })
 export class AppModule {}
