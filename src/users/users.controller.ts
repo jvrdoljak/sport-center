@@ -5,7 +5,7 @@ import {
 	Get,
 	Param,
 	Post,
-	Put
+	Put,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/createUser.dto";
 import { UpdateUserDto } from "./dto/updateUser.dto";

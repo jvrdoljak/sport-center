@@ -5,7 +5,7 @@ import {
 	Get,
 	Param,
 	Post,
-	Put
+	Put,
 } from "@nestjs/common";
 import { ClassesService } from "./classes.service";
 import { CreateClassDto } from "./dto/createClass.dto";
