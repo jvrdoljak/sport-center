@@ -26,7 +26,7 @@ export class ClassesController {
 	 */
 	@Get()
 	@UseGuards(JwtAuthGuard)
-	findAll(@Query('sports') sports?:string) {
+	findAll(@Query("sports") sports?: string) {
 		return this.classesService.findAll(sports);
 	}
 

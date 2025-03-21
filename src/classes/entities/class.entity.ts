@@ -16,8 +16,12 @@ export class Class {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
-	@Column()
-	schedule: Date;
+	@Column({ type: "json" })
+	schedule: {
+		day: string;
+		startTime: string;
+		endTime: string;
+	}[];
 
 	@Column({ type: "int" })
 	durationMins: number;

@@ -52,7 +52,6 @@ export class UsersController {
 	 * createAdmin
 	 */
 	@Post("create-admin")
-	@UseGuards(JwtAuthGuard)
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(Role.Admin)
 	createAdmin(@Body() user: CreateUserDto) {
