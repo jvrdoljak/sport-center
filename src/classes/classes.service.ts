@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SportsService } from "src/sports/sports.service";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { CreateClassDto } from "./dto/createClass.dto";
 import { UpdateClassDto } from "./dto/updateClass.dto";
 import { Class } from "./entities/class.entity";
@@ -17,9 +17,20 @@ export class ClassesService {
 	/**
 	 * findAll
 	 */
-	async findAll(): Promise<Array<Class>> {
+	async findAll(sports?: string): Promise<Array<Class>> {
+		if (sports) {
+			const sportNames = sports.split(",").map((s) => s.trim());
+			return this.classesRepository.find({
+				relations: ["sport"],
+				where: {
+					sport: {
+						name: In(sportNames),
+					},
+				},
+			});
+		}
 		return await this.classesRepository.find({
-			relations: ["sport", "enrollments"],
+			relations: ["sport"],
 		});
 	}
 
@@ -29,7 +40,7 @@ export class ClassesService {
 	async findOne(id: string) {
 		const existingClass = await this.classesRepository.findOne({
 			where: { id },
-			relations: ["sport", "enrollments"],
+			relations: ["sport"],
 		});
 
 		if (!existingClass) {

@@ -6,6 +6,7 @@ import {
 	Param,
 	Post,
 	Put,
+	Query,
 	UseGuards,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
@@ -25,8 +26,8 @@ export class ClassesController {
 	 */
 	@Get()
 	@UseGuards(JwtAuthGuard)
-	findAll() {
-		return this.classesService.findAll();
+	findAll(@Query('sports') sports?:string) {
+		return this.classesService.findAll(sports);
 	}
 
 	/**

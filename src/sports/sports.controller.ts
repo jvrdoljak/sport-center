@@ -21,15 +21,13 @@ export class SportsController {
 	constructor(private readonly sportsService: SportsService) {}
 
 	@Get()
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(Role.Admin)
+	@UseGuards(JwtAuthGuard)
 	findAll() {
 		return this.sportsService.findAll();
 	}
 
 	@Get(":id")
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(Role.Admin)
+	@UseGuards(JwtAuthGuard)
 	findOne(@Param("id") id: string) {
 		return this.sportsService.findOne(id);
 	}
