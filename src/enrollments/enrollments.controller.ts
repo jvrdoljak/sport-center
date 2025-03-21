@@ -9,6 +9,9 @@ import {
 	UseGuards,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { Roles } from "src/common/decorators/roles.decorator";
+import { Role } from "src/common/enums/role";
+import { RolesGuard } from "src/common/guards/roles.guard";
 import { CreateEnrollmentDto } from "./dto/create-enrollment.dto";
 import { EnrollmentsService } from "./enrollments.service";
 
@@ -23,7 +26,8 @@ export class EnrollmentsController {
 	}
 
 	@Get()
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(Role.Admin)
 	findAll() {
 		return this.enrollmentsService.findAll();
 	}
