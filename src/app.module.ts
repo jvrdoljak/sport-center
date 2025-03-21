@@ -8,6 +8,13 @@ import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { ClassesModule } from "./classes/classes.module";
 import { RolesGuard } from "./common/guards/roles.guard";
+import {
+	DATABASE_HOST,
+	DATABASE_NAME,
+	DATABASE_PASSWORD,
+	DATABASE_PORT,
+	DATABASE_USERNAME
+} from "./config";
 import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { SportsModule } from "./sports/sports.module";
 import { UsersModule } from "./users/users.module";
@@ -20,11 +27,11 @@ import { UsersModule } from "./users/users.module";
 		TypeOrmModule.forRootAsync({
 			useFactory: () => ({
 				type: "mysql",
-				host: process.env.DATABASE_HOST || "localhost",
-				port: parseInt(process.env.DATABASE_PORT || "3306"),
-				username: process.env.DATABASE_USER || "sport_center_admin",
-				password: process.env.DATABASE_PASSWORD || "0g[~y16Atl,1",
-				database: process.env.DATABASE_NAME || "sport_center",
+				host: DATABASE_HOST,
+				port: DATABASE_PORT,
+				username: DATABASE_USERNAME,
+				password: DATABASE_PASSWORD,
+				database: DATABASE_NAME,
 				entities: [__dirname + "/**/*.entity{.ts,.js}"],
 				synchronize: true,
 				migrations: ["src/migrations/*.ts"],
