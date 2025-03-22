@@ -6,12 +6,9 @@ import {
 	Param,
 	Post,
 	Req,
-	UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
-import { RolesGuard } from "src/common/guards/roles.guard";
 import { CreateEnrollmentDto } from "./dto/create-enrollment.dto";
 import { EnrollmentsService } from "./enrollments.service";
 
@@ -20,32 +17,27 @@ export class EnrollmentsController {
 	constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
 	@Post()
-	@UseGuards(JwtAuthGuard)
 	create(@Req() req, @Body() createEnrollmentDto: CreateEnrollmentDto) {
 		return this.enrollmentsService.create(req.user.id, createEnrollmentDto);
 	}
 
 	@Get()
-	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(Role.Admin)
 	findAll() {
 		return this.enrollmentsService.findAll();
 	}
 
 	@Get("my-enrollments")
-	@UseGuards(JwtAuthGuard)
 	findMyEnrollments(@Req() req) {
 		return this.enrollmentsService.findByUser(req.user.id);
 	}
 
 	@Get("class/:classId")
-	@UseGuards(JwtAuthGuard)
 	findByClass(@Param("classId") classId: string) {
 		return this.enrollmentsService.findByClass(classId);
 	}
 
 	@Delete(":id")
-	@UseGuards(JwtAuthGuard)
 	delete(@Param("id") id: string, @Req() req) {
 		return this.enrollmentsService.delete(id, req.user.id);
 	}
