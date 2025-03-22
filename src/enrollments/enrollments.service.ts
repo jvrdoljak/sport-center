@@ -60,12 +60,21 @@ export class EnrollmentsService {
 		return this.enrollmentsRepository.save(enrollment);
 	}
 
+	/**
+	 * Find all enrollments.
+	 * @returns
+	 */
 	async findAll(): Promise<Enrollment[]> {
 		return this.enrollmentsRepository.find({
 			relations: ["user", "class", "class.sport"],
 		});
 	}
 
+	/**
+	 * Find enrollments filtered by userId.
+	 * @param userId
+	 * @returns
+	 */
 	async findByUser(userId: string): Promise<Enrollment[]> {
 		return this.enrollmentsRepository.find({
 			where: { userId },
@@ -73,6 +82,11 @@ export class EnrollmentsService {
 		});
 	}
 
+	/**
+	 * Find elrollments filtered by classId.
+	 * @param classId
+	 * @returns
+	 */
 	async findByClass(classId: string): Promise<Enrollment[]> {
 		return this.enrollmentsRepository.find({
 			where: { classId },
@@ -80,6 +94,11 @@ export class EnrollmentsService {
 		});
 	}
 
+	/**
+	 * Find one enrollment identified by id.
+	 * @param id
+	 * @returns
+	 */
 	async findOne(id: string): Promise<Enrollment> {
 		const enrollment = await this.enrollmentsRepository.findOne({
 			where: { id },
@@ -93,6 +112,11 @@ export class EnrollmentsService {
 		return enrollment;
 	}
 
+	/**
+	 * Delete enrollment identified by id.
+	 * @param id
+	 * @param userId
+	 */
 	async delete(id: string, userId: string): Promise<void> {
 		const enrollment = await this.findOne(id);
 

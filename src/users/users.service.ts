@@ -19,7 +19,8 @@ export class UsersService {
 	) {}
 
 	/**
-	 * findAll
+	 * Find all users.
+	 * @returns
 	 */
 	async findAll(): Promise<Array<User>> {
 		return await this.usersRepository.find({
@@ -28,7 +29,9 @@ export class UsersService {
 	}
 
 	/**
-	 * findOne
+	 * Find one user identified by id.
+	 * @param id
+	 * @returns
 	 */
 	async findOne(id: string): Promise<User> {
 		const user = await this.usersRepository.findOne({
@@ -47,7 +50,10 @@ export class UsersService {
 	}
 
 	/**
-	 * creatInitialAdminAccount
+	 * Create initial admin account if not exists.
+	 * @param createUserDto
+	 * @param role
+	 * @returns
 	 */
 	async creatInitialAdminAccount(
 		createUserDto: CreateUserDto,
@@ -73,7 +79,10 @@ export class UsersService {
 	}
 
 	/**
-	 * createOne
+	 * Create new user.
+	 * @param createUserDto
+	 * @param role
+	 * @returns
 	 */
 	async createOne(
 		createUserDto: CreateUserDto,
@@ -99,7 +108,10 @@ export class UsersService {
 	}
 
 	/**
-	 * updateOne
+	 * Update one user identified by id.
+	 * @param id
+	 * @param updateUserDto
+	 * @returns
 	 */
 	async updateOne(id: string, updateUserDto: UpdateUserDto): Promise<User> {
 		const user = await this.usersRepository.findOneBy({ id });
@@ -118,7 +130,8 @@ export class UsersService {
 	}
 
 	/**
-	 * deleteOne
+	 * Delete user identified by id.
+	 * @param id
 	 */
 	async deleteOne(id: string): Promise<void> {
 		const result = await this.usersRepository.delete({ id });

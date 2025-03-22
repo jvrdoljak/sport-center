@@ -15,7 +15,9 @@ export class ClassesService {
 	) {}
 
 	/**
-	 * findAll
+	 * Find all classes..
+	 * @param sports
+	 * @returns
 	 */
 	async findAll(sports?: string): Promise<Array<Class>> {
 		if (sports) {
@@ -35,7 +37,9 @@ export class ClassesService {
 	}
 
 	/**
-	 * findOne
+	 * Find class identified by id.
+	 * @param id
+	 * @returns
 	 */
 	async findOne(id: string) {
 		const existingClass = await this.classesRepository.findOne({
@@ -51,7 +55,7 @@ export class ClassesService {
 	}
 
 	/**
-	 *
+	 * Create class.
 	 * @param createClassDto
 	 * @returns
 	 */
@@ -65,7 +69,7 @@ export class ClassesService {
 	}
 
 	/**
-	 *
+	 * Update class identified by id.
 	 * @param id
 	 * @param updateClassDto
 	 * @returns
@@ -87,7 +91,8 @@ export class ClassesService {
 	}
 
 	/**
-	 * deleteOne
+	 * Delete class identified by id.
+	 * @param id
 	 */
 	async deleteOne(id: string): Promise<void> {
 		const result = await this.classesRepository.delete(id);
@@ -98,7 +103,7 @@ export class ClassesService {
 	}
 
 	/**
-	 *
+	 * Check if class out of capacity.
 	 * @param id
 	 * @returns
 	 */

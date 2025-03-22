@@ -16,13 +16,20 @@ export class SportsService {
 		@InjectRepository(Sport)
 		private sportRepository: Repository<Sport>,
 	) {}
-
+	/**
+	 * Find all sports.
+	 * @returns
+	 */
 	async findAll(): Promise<Array<Sport>> {
 		return await this.sportRepository.find({
 			relations: ["classes"],
 		});
 	}
-
+	/**
+	 * Find one sport identified by id.
+	 * @param id
+	 * @returns
+	 */
 	async findOne(id: string): Promise<Sport> {
 		const sport = await this.sportRepository.findOne({
 			where: { id },
@@ -35,7 +42,11 @@ export class SportsService {
 
 		return sport;
 	}
-
+	/**
+	 * Create new sport.
+	 * @param createSportDto
+	 * @returns
+	 */
 	async createOne(createSportDto: CreateSportDto): Promise<Sport> {
 		const existingSport = await this.sportRepository.findOneBy({
 			name: createSportDto.name,
@@ -51,7 +62,12 @@ export class SportsService {
 
 		return await this.sportRepository.save(newSport);
 	}
-
+	/**
+	 * Update sport idenfitied by id.
+	 * @param id
+	 * @param updateSportDto
+	 * @returns
+	 */
 	async updateOne(id: string, updateSportDto: UpdateSportDto): Promise<Sport> {
 		const existingSport = await this.sportRepository.findOneBy({ id });
 
@@ -63,7 +79,10 @@ export class SportsService {
 
 		return await this.sportRepository.save(existingSport);
 	}
-
+	/**
+	 * Delete sport identified by id.
+	 * @param id
+	 */
 	async deleteOne(id: string): Promise<void> {
 		const sport = await this.findOne(id);
 

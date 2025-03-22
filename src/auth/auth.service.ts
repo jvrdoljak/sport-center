@@ -13,6 +13,12 @@ export class AuthService {
 		private jwtService: JwtService,
 	) {}
 
+	/**
+	 * Validate user credentials.
+	 * @param email
+	 * @param password
+	 * @returns
+	 */
 	async validateUser(email: string, password: string): Promise<any> {
 		const user = await this.usersService.findByEmail(email);
 
@@ -24,6 +30,11 @@ export class AuthService {
 		return null;
 	}
 
+	/**
+	 * Login user.
+	 * @param loginDto
+	 * @returns
+	 */
 	async login(loginDto: LoginDto) {
 		const user = await this.validateUser(loginDto.email, loginDto.password);
 
@@ -39,6 +50,11 @@ export class AuthService {
 		};
 	}
 
+	/**
+	 * Register a new user.
+	 * @param registerDto
+	 * @returns
+	 */
 	async register(registerDto: RegisterDto): Promise<User> {
 		return this.usersService.createOne(registerDto);
 	}
