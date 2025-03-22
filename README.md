@@ -39,7 +39,6 @@ JWT_SECRET
 Run these commands:
 
 ```bash
-
 docker-compose up -d mysql
 nvm use
 npm install
@@ -47,9 +46,9 @@ npm install
 
 ### Prod mode
 
-Copy the values from .env.local into .env:
+Copy the values from .env.prod into .env:
 ```bash
-cp .env.local .env
+cp .env.prod .env
 ```
 Set and uncomment the next values in .env:
 ```bash
