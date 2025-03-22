@@ -4,6 +4,7 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
@@ -37,3 +38,4 @@ volumes:
 networks:
   sport-network:
     driver: bridge
+    external: true
