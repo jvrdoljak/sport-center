@@ -22,8 +22,24 @@ description), e.g. through endpoint /api/classes/{id}
 
 ### Develop mode
 
+Copy the values from .env.local into .env:
 ```bash
 cp .env.local .env
+```
+Set and uncomment the next values in .env:
+```bash
+INITIAL_ADMIN_EMAIL
+INITIAL_ADMIN_PASSWORD
+
+DATABASE_USER
+DATABASE_PASSWORD
+
+JWT_SECRET
+```
+Run these commands:
+
+```bash
+
 docker-compose up -d mysql
 nvm use
 npm install
@@ -31,11 +47,23 @@ npm install
 
 ### Prod mode
 
+Copy the values from .env.local into .env:
 ```bash
-cp .env.prod .env
+cp .env.local .env
+```
+Set and uncomment the next values in .env:
+```bash
+INITIAL_ADMIN_EMAIL
+INITIAL_ADMIN_PASSWORD
+
+DATABASE_USER
+DATABASE_PASSWORD
+
+JWT_SECRET
+```
+Run these commands:
+```bash
 docker-compose up --build
-nvm use
-npm install
 ```
 
 ## Compile and run the project
