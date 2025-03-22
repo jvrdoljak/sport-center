@@ -70,7 +70,7 @@ export class EnrollmentsService {
 	async findByClass(classId: string): Promise<Enrollment[]> {
 		return this.enrollmentsRepository.find({
 			where: { classId },
-			relations: ["user"],
+			relations: [],
 		});
 	}
 
