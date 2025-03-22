@@ -36,13 +36,13 @@ async function bootstrap() {
 
 	// Swagger documentation setup
 	const config = new DocumentBuilder()
-    .setTitle("Sports Center API")
-    .setDescription("API for managing sports classes and enrollments")
-    .setVersion("1.0")
-    .addBearerAuth()
-    .build()
-	const document = SwaggerModule.createDocument(app, config)
-	SwaggerModule.setup("api/docs", app, document)
+		.setTitle("Sports Center API")
+		.setDescription("API for managing sports classes and enrollments")
+		.setVersion("1.0")
+		.addBearerAuth()
+		.build();
+	const document = SwaggerModule.createDocument(app, config);
+	SwaggerModule.setup("api/docs", app, document);
 
 	app.enableCors();
 

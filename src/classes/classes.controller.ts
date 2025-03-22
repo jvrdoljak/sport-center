@@ -25,9 +25,13 @@ export class ClassesController {
 	 * @returns
 	 */
 	@Get()
-	@ApiOperation({ summary: 'Find all classes with optional sport filtering' })
-	@ApiQuery({ name: 'sports', required: false, description: 'Filter by sport names (comma-separated)' })
-	@ApiResponse({ status: 200, description: 'Return all classes.' })
+	@ApiOperation({ summary: "Find all classes with optional sport filtering" })
+	@ApiQuery({
+		name: "sports",
+		required: false,
+		description: "Filter by sport names (comma-separated)",
+	})
+	@ApiResponse({ status: 200, description: "Return all classes." })
 	findAll(@Query("sports") sports?: string) {
 		return this.classesService.findAll(sports);
 	}
@@ -38,9 +42,9 @@ export class ClassesController {
 	 * @returns
 	 */
 	@Get(":id")
-	@ApiOperation({ summary: 'Get a class by id' })
-	@ApiResponse({ status: 200, description: 'Return the class.' })
-	@ApiResponse({ status: 404, description: 'Class not found.' })
+	@ApiOperation({ summary: "Get a class by id" })
+	@ApiResponse({ status: 200, description: "Return the class." })
+	@ApiResponse({ status: 404, description: "Class not found." })
 	findOne(@Param("id") id: string) {
 		return this.classesService.findOne(id);
 	}
@@ -52,12 +56,12 @@ export class ClassesController {
 	 */
 	@Post()
 	@Roles(Role.Admin)
-	@ApiOperation({ summary: 'Create a new class (Admin only)' })
-	@ApiResponse({ status: 201, description: 'Class successfully created.' })
-	@ApiResponse({ status: 400, description: 'Bad request.' })
-	@ApiResponse({ status: 401, description: 'Unauthorized.' })
-	@ApiResponse({ status: 403, description: 'Forbidden.' })
-	@ApiResponse({ status: 404, description: 'Sport not found.' })
+	@ApiOperation({ summary: "Create a new class (Admin only)" })
+	@ApiResponse({ status: 201, description: "Class successfully created." })
+	@ApiResponse({ status: 400, description: "Bad request." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({ status: 404, description: "Sport not found." })
 	createOne(@Body() createClassDto: CreateClassDto) {
 		return this.classesService.createOne(createClassDto);
 	}
@@ -86,25 +90,25 @@ export class ClassesController {
 	 */
 	@Delete(":id")
 	@Roles(Role.Admin)
-	@ApiOperation({ summary: 'Delete a class (Admin only)' })
-	@ApiResponse({ status: 200, description: 'Class successfully deleted.' })
-	@ApiResponse({ status: 401, description: 'Unauthorized.' })
-	@ApiResponse({ status: 403, description: 'Forbidden.' })
-	@ApiResponse({ status: 404, description: 'Class not found.' })
+	@ApiOperation({ summary: "Delete a class (Admin only)" })
+	@ApiResponse({ status: 200, description: "Class successfully deleted." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({ status: 404, description: "Class not found." })
 	deleteOne(@Param("id") id: string) {
 		return this.classesService.deleteOne(id);
 	}
 
 	/**
 	 * Check class availability
-	 * @param id 
-	 * @returns 
+	 * @param id
+	 * @returns
 	 */
-	@Get(':id/availability')
-	@ApiOperation({ summary: 'Check class availability' })
-	@ApiResponse({ status: 200, description: 'Return class availability.' })
-	@ApiResponse({ status: 404, description: 'Class not found.' })
-	checkAvailability(@Param('id') id: string) {
-	  return this.classesService.checkAvailability(id);
+	@Get(":id/availability")
+	@ApiOperation({ summary: "Check class availability" })
+	@ApiResponse({ status: 200, description: "Return class availability." })
+	@ApiResponse({ status: 404, description: "Class not found." })
+	checkAvailability(@Param("id") id: string) {
+		return this.classesService.checkAvailability(id);
 	}
 }

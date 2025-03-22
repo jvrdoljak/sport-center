@@ -35,9 +35,9 @@ export class SportsController {
 	 * @returns
 	 */
 	@Get(":id")
-	@ApiOperation({ summary: 'Find sport by id' })
-	@ApiResponse({ status: 200, description: 'Return the sport.' })
-	@ApiResponse({ status: 404, description: 'Sport not found.' })
+	@ApiOperation({ summary: "Find sport by id" })
+	@ApiResponse({ status: 200, description: "Return the sport." })
+	@ApiResponse({ status: 404, description: "Sport not found." })
 	findOne(@Param("id") id: string) {
 		return this.sportsService.findOne(id);
 	}
@@ -49,12 +49,15 @@ export class SportsController {
 	 */
 	@Post()
 	@Roles(Role.Admin)
-	@ApiOperation({ summary: 'Create a new sport (Admin only)' })
-	@ApiResponse({ status: 201, description: 'Sport successfully created.' })
-	@ApiResponse({ status: 400, description: 'Bad request.' })
-	@ApiResponse({ status: 401, description: 'Unauthorized.' })
-	@ApiResponse({ status: 403, description: 'Forbidden.' })
-	@ApiResponse({ status: 409, description: 'Sport with this name already exists.' })
+	@ApiOperation({ summary: "Create a new sport (Admin only)" })
+	@ApiResponse({ status: 201, description: "Sport successfully created." })
+	@ApiResponse({ status: 400, description: "Bad request." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({
+		status: 409,
+		description: "Sport with this name already exists.",
+	})
 	createOne(@Body() sport: CreateSportDto) {
 		return this.sportsService.createOne(sport);
 	}
@@ -73,7 +76,10 @@ export class SportsController {
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "Sport not found." })
-	@ApiResponse({ status: 409, description: "Sport with this name already exists." })
+	@ApiResponse({
+		status: 409,
+		description: "Sport with this name already exists.",
+	})
 	updateOne(@Param("id") id: string, @Body() sport: UpdateSportDto) {
 		return this.sportsService.updateOne(id, sport);
 	}
@@ -85,11 +91,11 @@ export class SportsController {
 	 */
 	@Delete(":id")
 	@Roles(Role.Admin)
-	@ApiOperation({ summary: 'Delete a sport (Admin only)' })
-	@ApiResponse({ status: 200, description: 'Sport successfully deleted.' })
-	@ApiResponse({ status: 401, description: 'Unauthorized.' })
-	@ApiResponse({ status: 403, description: 'Forbidden.' })
-	@ApiResponse({ status: 404, description: 'Sport not found.' })
+	@ApiOperation({ summary: "Delete a sport (Admin only)" })
+	@ApiResponse({ status: 200, description: "Sport successfully deleted." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({ status: 404, description: "Sport not found." })
 	deleteOne(@Param("id") id: string) {
 		return this.sportsService.deleteOne(id);
 	}
