@@ -19,7 +19,9 @@ export class ClassesController {
 	constructor(private readonly classesService: ClassesService) {}
 
 	/**
-	 * findAll
+	 * Find all classes filtered by sports.
+	 * @param sports
+	 * @returns
 	 */
 	@Get()
 	findAll(@Query("sports") sports?: string) {
@@ -27,7 +29,9 @@ export class ClassesController {
 	}
 
 	/**
-	 * findOne
+	 * Find one class identified by id.
+	 * @param sports
+	 * @returns
 	 */
 	@Get(":id")
 	findOne(@Param("id") id: string) {
@@ -35,7 +39,9 @@ export class ClassesController {
 	}
 
 	/**
-	 * createOne
+	 * Create one class.
+	 * @param sports
+	 * @returns
 	 */
 	@Post()
 	@Roles(Role.Admin)
@@ -44,7 +50,9 @@ export class ClassesController {
 	}
 
 	/**
-	 * updateOne
+	 * Update one class identified by id.
+	 * @param sports
+	 * @returns
 	 */
 	@Put(":id")
 	@Roles(Role.Admin)
@@ -53,7 +61,9 @@ export class ClassesController {
 	}
 
 	/**
-	 * deleteOne
+	 * Delete class identified by id.
+	 * @param sports
+	 * @returns
 	 */
 	@Delete(":id")
 	@Roles(Role.Admin)

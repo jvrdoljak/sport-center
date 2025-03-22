@@ -19,7 +19,8 @@ export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
 	/**
-	 * findAll
+	 * Get all users.
+	 * @returns
 	 */
 	@Get()
 	@Roles(Role.Admin)
@@ -28,7 +29,9 @@ export class UsersController {
 	}
 
 	/**
-	 * findOne
+	 * Get user by id.
+	 * @param id
+	 * @returns
 	 */
 	@Get(":id")
 	findOne(@Param("id") id: string) {
@@ -36,7 +39,9 @@ export class UsersController {
 	}
 
 	/**
-	 * createUser
+	 * Create user.
+	 * @param user
+	 * @returns
 	 */
 	@Post("create-user")
 	createUser(@Body() user: CreateUserDto) {
@@ -44,7 +49,9 @@ export class UsersController {
 	}
 
 	/**
-	 * createAdmin
+	 * Create admin user.
+	 * @param user
+	 * @returns
 	 */
 	@Post("create-admin")
 	@Roles(Role.Admin)
@@ -53,7 +60,10 @@ export class UsersController {
 	}
 
 	/**
-	 * updateSelf
+	 * Update self.
+	 * @param req
+	 * @param updateUserDto
+	 * @returns
 	 */
 	@Put("update-self")
 	updateSelf(@Req() req, @Body() updateUserDto: UpdateUserDto) {
@@ -61,7 +71,10 @@ export class UsersController {
 	}
 
 	/**
-	 * updateOne
+	 * Update another user.
+	 * @param id
+	 * @param updateUserDto
+	 * @returns
 	 */
 	@Put(":id")
 	@Roles(Role.Admin)
@@ -70,7 +83,9 @@ export class UsersController {
 	}
 
 	/**
-	 * deleteSelf
+	 * Delete self.
+	 * @param req
+	 * @returns
 	 */
 	@Delete("delete-self")
 	deleteSelf(@Req() req) {
@@ -78,7 +93,9 @@ export class UsersController {
 	}
 
 	/**
-	 * deleteOne
+	 * Delete user by id.
+	 * @param id
+	 * @returns
 	 */
 	@Delete(":id")
 	@Roles(Role.Admin)

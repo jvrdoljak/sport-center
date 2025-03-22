@@ -18,6 +18,12 @@ export class EnrollmentsService {
 		private classesService: ClassesService,
 	) {}
 
+	/**
+	 * Creates user identified by id.
+	 * @param userId
+	 * @param createEnrollmentDto
+	 * @returns
+	 */
 	async create(
 		userId: string,
 		createEnrollmentDto: CreateEnrollmentDto,
