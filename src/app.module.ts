@@ -13,7 +13,7 @@ import {
 	DATABASE_NAME,
 	DATABASE_PASSWORD,
 	DATABASE_PORT,
-	DATABASE_USERNAME
+	DATABASE_USERNAME,
 } from "./config";
 import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { SportsModule } from "./sports/sports.module";
