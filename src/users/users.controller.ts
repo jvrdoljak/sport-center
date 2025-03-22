@@ -8,6 +8,7 @@ import {
 	Put,
 	Req,
 } from "@nestjs/common";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
 import { CreateUserDto } from "./dto/createUser.dto";
@@ -24,6 +25,10 @@ export class UsersController {
 	 */
 	@Get()
 	@Roles(Role.Admin)
+	@ApiOperation({ summary: "Get all users (Admin only)" })
+	@ApiResponse({ status: 200, description: "Return all users." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
 	findAll() {
 		return this.usersService.findAll();
 	}
@@ -34,6 +39,11 @@ export class UsersController {
 	 * @returns
 	 */
 	@Get(":id")
+	@ApiOperation({ summary: 'Get a user by id (Admin only)' })
+	@ApiResponse({ status: 200, description: 'Return the user.' })
+	@ApiResponse({ status: 401, description: 'Unauthorized.' })
+	@ApiResponse({ status: 403, description: 'Forbidden.' })
+	@ApiResponse({ status: 404, description: 'User not found.' })
 	findOne(@Param("id") id: string) {
 		return this.usersService.findOne(id);
 	}
@@ -44,6 +54,10 @@ export class UsersController {
 	 * @returns
 	 */
 	@Post("create-user")
+	@ApiOperation({ summary: 'Create a new user' })
+	@ApiResponse({ status: 201, description: 'User successfully created.' })
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	@ApiResponse({ status: 409, description: 'Email already exists.' })
 	createUser(@Body() user: CreateUserDto) {
 		return this.usersService.createOne(user);
 	}
@@ -55,6 +69,10 @@ export class UsersController {
 	 */
 	@Post("create-admin")
 	@Roles(Role.Admin)
+	@ApiOperation({ summary: 'Create a new admin user' })
+	@ApiResponse({ status: 201, description: 'User successfully created.' })
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	@ApiResponse({ status: 409, description: 'Email already exists.' })
 	createAdmin(@Body() user: CreateUserDto) {
 		return this.usersService.createOne(user, Role.Admin);
 	}
@@ -66,6 +84,11 @@ export class UsersController {
 	 * @returns
 	 */
 	@Put("update-self")
+	@ApiOperation({ summary: "Update self." })
+	@ApiResponse({ status: 200, description: "User successfully updated." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({ status: 404, description: "User not found." })
 	updateSelf(@Req() req, @Body() updateUserDto: UpdateUserDto) {
 		return this.usersService.updateOne(req.user.id, updateUserDto);
 	}
@@ -78,6 +101,11 @@ export class UsersController {
 	 */
 	@Put(":id")
 	@Roles(Role.Admin)
+	@ApiOperation({ summary: "Update another user (Admin only)" })
+	@ApiResponse({ status: 200, description: "User successfully updated." })
+	@ApiResponse({ status: 401, description: "Unauthorized." })
+	@ApiResponse({ status: 403, description: "Forbidden." })
+	@ApiResponse({ status: 404, description: "User not found." })
 	updateOne(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
 		return this.usersService.updateOne(id, updateUserDto);
 	}
@@ -88,6 +116,11 @@ export class UsersController {
 	 * @returns
 	 */
 	@Delete("delete-self")
+	@ApiOperation({ summary: 'Delete self' })
+	@ApiResponse({ status: 200, description: 'User successfully deleted.' })
+	@ApiResponse({ status: 401, description: 'Unauthorized.' })
+	@ApiResponse({ status: 403, description: 'Forbidden.' })
+	@ApiResponse({ status: 404, description: 'User not found.' })
 	deleteSelf(@Req() req) {
 		return this.usersService.deleteOne(req.user.id);
 	}
@@ -99,6 +132,11 @@ export class UsersController {
 	 */
 	@Delete(":id")
 	@Roles(Role.Admin)
+	@ApiOperation({ summary: 'Delete a user by id (Admin only)' })
+	@ApiResponse({ status: 200, description: 'User successfully deleted.' })
+	@ApiResponse({ status: 401, description: 'Unauthorized.' })
+	@ApiResponse({ status: 403, description: 'Forbidden.' })
+	@ApiResponse({ status: 404, description: 'User not found.' })
 	deleteOne(@Param("id") id: string) {
 		return this.usersService.deleteOne(id);
 	}

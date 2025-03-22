@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from "@nestjs/common";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Public } from "src/common/decorators/public.decorator";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
@@ -15,6 +16,10 @@ export class AuthController {
 	 */
 	@Post("register")
 	@Public()
+	@ApiOperation({ summary: 'Register a new user' })
+	@ApiResponse({ status: 201, description: 'User successfully registered.' })
+	@ApiResponse({ status: 400, description: 'Bad request.' })
+	@ApiResponse({ status: 409, description: 'Email already exists.' })
 	register(@Body() registerDto: RegisterDto) {
 		return this.authService.register(registerDto);
 	}
@@ -26,6 +31,9 @@ export class AuthController {
 	 */
 	@Post("login")
 	@Public()
+	@ApiOperation({ summary: 'Login with email and password' })
+	@ApiResponse({ status: 200, description: 'User successfully logged in.' })
+	@ApiResponse({ status: 401, description: 'Invalid credentials.' })
 	login(@Body() loginDto: LoginDto) {
 		return this.authService.login(loginDto);
 	}

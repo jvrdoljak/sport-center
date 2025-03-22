@@ -1,5 +1,6 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { Role } from "./common/enums/role";
 import {
@@ -32,6 +33,16 @@ async function bootstrap() {
 	) {
 		console.info("User: admin@sport-center.com successfully created.");
 	}
+
+	// Swagger documentation setup
+	const config = new DocumentBuilder()
+    .setTitle("Sports Center API")
+    .setDescription("API for managing sports classes and enrollments")
+    .setVersion("1.0")
+    .addBearerAuth()
+    .build()
+	const document = SwaggerModule.createDocument(app, config)
+	SwaggerModule.setup("api/docs", app, document)
 
 	app.enableCors();
 
