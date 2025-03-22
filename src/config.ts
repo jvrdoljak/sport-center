@@ -4,6 +4,11 @@ dotenv.config();
 
 export const APP_PORT = process.env.APP_PORT || 3000;
 
+export const INITIAL_ADMIN_EMAIL =
+	process.env.INITIAL_ADMIN_EMAIL || "admin@sport-center.com";
+export const INITIAL_ADMIN_PASSWORD =
+	process.env.INITIAL_ADMIN_PASSWORD || "DfYXcM9p0v4EnF9yG3OhXq";
+
 export const DATABASE_HOST = process.env.DATABASE_HOST || "mysql";
 export const DATABASE_PORT = parseInt(process.env.DATABASE_PORT || "3306");
 export const DATABASE_USERNAME = process.env.DATABASE_USER || "root";

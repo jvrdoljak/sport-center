@@ -47,6 +47,32 @@ export class UsersService {
 	}
 
 	/**
+	 * creatInitialAdminAccount
+	 */
+	async creatInitialAdminAccount(
+		createUserDto: CreateUserDto,
+		role: Role = Role.User,
+	): Promise<User | null> {
+		const existingUser = await this.usersRepository.findOne({
+			where: { email: createUserDto.email },
+		});
+
+		if (existingUser) {
+			return null;
+		}
+
+		const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+		const user = this.usersRepository.create({
+			...createUserDto,
+			password: hashedPassword,
+			role,
+		});
+
+		return this.usersRepository.save(user);
+	}
+
+	/**
 	 * createOne
 	 */
 	async createOne(
