@@ -19,3 +19,6 @@ export const DATABASE_NAME = process.env.DATABASE_NAME || "sport_center";
 export const JWT_SECRET = process.env.JWT_SECRET || "6S0_YLc4gW_McePERZ1_rHX4";
 
 export const IS_PUBLIC_KEY = "isPublic";
+
+export const LOGGER_FILE_LOCATON =
+	process.env.LOGGER_FILE_LOCATON || "logs/app.log";

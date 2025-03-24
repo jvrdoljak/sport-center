@@ -8,10 +8,11 @@ import {
 	INITIAL_ADMIN_EMAIL,
 	INITIAL_ADMIN_PASSWORD,
 } from "./config";
+import { logger } from "./logger";
 import { UsersService } from "./users/users.service";
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create(AppModule, { logger });
 	app.useGlobalPipes(
 		new ValidationPipe({
 			whitelist: true,
