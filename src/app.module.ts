@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { APP_GUARD } from "@nestjs/core";
+import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -16,6 +16,7 @@ import {
 	DATABASE_USERNAME,
 } from "./config";
 import { EnrollmentsModule } from "./enrollments/enrollments.module";
+import { ExceptionInterceptor } from "./interceptor/exception.interceptor";
 import { SportsModule } from "./sports/sports.module";
 import { UsersModule } from "./users/users.module";
 
@@ -57,6 +58,10 @@ import { UsersModule } from "./users/users.module";
 		{
 			provide: APP_GUARD,
 			useClass: RolesGuard,
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: ExceptionInterceptor,
 		},
 	],
 })
