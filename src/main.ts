@@ -32,7 +32,7 @@ async function bootstrap() {
 			Role.Admin,
 		)
 	) {
-		console.info("User: admin@sport-center.com successfully created.");
+		logger.log(`User: ${INITIAL_ADMIN_EMAIL} successfully created.`);
 	}
 
 	// Swagger documentation setup
