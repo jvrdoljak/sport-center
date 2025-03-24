@@ -11,8 +11,8 @@ import {
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
-import { CreateUserDto } from "./dto/createUser.dto";
-import { UpdateUserDto } from "./dto/updateUser.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersService } from "./users.service";
 
 @Controller("users")

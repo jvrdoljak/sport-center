@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SportsService } from "src/sports/sports.service";
 import { In, Repository } from "typeorm";
-import { CreateClassDto } from "./dto/createClass.dto";
-import { UpdateClassDto } from "./dto/updateClass.dto";
+import { CreateClassDto } from "./dto/create-class.dto";
+import { UpdateClassDto } from "./dto/update-class.dto";
 import { Class } from "./entities/class.entity";
 
 @Injectable()

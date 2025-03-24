@@ -7,14 +7,14 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { ClassesModule } from "./classes/classes.module";
-import { RolesGuard } from "./common/guards/roles.guard";
 import {
 	DATABASE_HOST,
 	DATABASE_NAME,
 	DATABASE_PASSWORD,
 	DATABASE_PORT,
 	DATABASE_USERNAME,
-} from "./config";
+} from "./common/config/config";
+import { RolesGuard } from "./common/guards/roles.guard";
 import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { SportsModule } from "./sports/sports.module";
 import { UsersModule } from "./users/users.module";

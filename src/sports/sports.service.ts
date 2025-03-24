@@ -6,8 +6,8 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { CreateSportDto } from "./dto/createSport.dto";
-import { UpdateSportDto } from "./dto/updateSport.dto";
+import { CreateSportDto } from "./dto/create-sport.dto";
+import { UpdateSportDto } from "./dto/update-sport.dto";
 import { Sport } from "./entities/sport.entity";
 
 @Injectable()

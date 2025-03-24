@@ -12,8 +12,8 @@ import { ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
 import { ClassesService } from "./classes.service";
-import { CreateClassDto } from "./dto/createClass.dto";
-import { UpdateClassDto } from "./dto/updateClass.dto";
+import { CreateClassDto } from "./dto/create-class.dto";
+import { UpdateClassDto } from "./dto/update-class.dto";
 
 @Controller("classes")
 export class ClassesController {

@@ -2,12 +2,12 @@ import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { Role } from "./common/enums/role";
 import {
 	APP_PORT,
 	INITIAL_ADMIN_EMAIL,
 	INITIAL_ADMIN_PASSWORD,
-} from "./config";
+} from "./common/config/config";
+import { Role } from "./common/enums/role";
 import { logger } from "./logger";
 import { UsersService } from "./users/users.service";
 

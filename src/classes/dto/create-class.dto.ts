@@ -44,7 +44,7 @@ export class CreateClassDto {
 	@IsNotEmpty()
 	durationMins: number;
 
-	@ApiProperty({ example: "Learn the basic skills and rules of basketball." })
+	@ApiProperty({ example: "Learn the basic skills football." })
 	@IsNotEmpty()
 	@IsString()
 	description: string;
