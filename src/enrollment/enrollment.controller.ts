@@ -11,11 +11,11 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
 import { CreateEnrollmentDto } from "./dto/create-enrollment.dto";
-import { EnrollmentsService } from "./enrollments.service";
+import { EnrollmentService } from "./enrollment.service";
 
-@Controller("enrollments")
-export class EnrollmentsController {
-	constructor(private readonly enrollmentsService: EnrollmentsService) {}
+@Controller("enrollment")
+export class EnrollmentController {
+	constructor(private readonly enrollmentService: EnrollmentService) {}
 
 	/**
 	 * Creates enrollment for identified user by request.
@@ -42,7 +42,7 @@ export class EnrollmentsController {
 		description: "User is already enrolled in this class.",
 	})
 	create(@Req() req, @Body() createEnrollmentDto: CreateEnrollmentDto) {
-		return this.enrollmentsService.create(req.user.id, createEnrollmentDto);
+		return this.enrollmentService.create(req.user.id, createEnrollmentDto);
 	}
 
 	/**
@@ -56,7 +56,7 @@ export class EnrollmentsController {
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	findAll() {
-		return this.enrollmentsService.findAll();
+		return this.enrollmentService.findAll();
 	}
 
 	/**
@@ -69,7 +69,7 @@ export class EnrollmentsController {
 	@ApiResponse({ status: 200, description: "Return user's enrollments." })
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	findMyEnrollments(@Req() req) {
-		return this.enrollmentsService.findByUser(req.user.id);
+		return this.enrollmentService.findByUser(req.user.id);
 	}
 
 	/**
@@ -89,7 +89,7 @@ export class EnrollmentsController {
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	findByClass(@Param("classId") classId: string) {
-		return this.enrollmentsService.findByClass(classId);
+		return this.enrollmentService.findByClass(classId);
 	}
 
 	/**
@@ -113,6 +113,6 @@ export class EnrollmentsController {
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	@ApiResponse({ status: 404, description: "Enrollment not found." })
 	delete(@Param("id") id: string, @Req() req) {
-		return this.enrollmentsService.delete(id, req.user.id);
+		return this.enrollmentService.delete(id, req.user.id);
 	}
 }

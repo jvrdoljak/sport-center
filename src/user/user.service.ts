@@ -12,7 +12,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entitites/user.entity";
 
 @Injectable()
-export class UsersService {
+export class UserService {
 	constructor(
 		@InjectRepository(User)
 		private usersRepository: Repository<User>,

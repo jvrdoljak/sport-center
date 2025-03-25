@@ -13,11 +13,11 @@ import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { UsersService } from "./users.service";
+import { UserService } from "./user.service";
 
-@Controller("users")
-export class UsersController {
-	constructor(private readonly usersService: UsersService) {}
+@Controller("user")
+export class UserController {
+	constructor(private readonly userService: UserService) {}
 
 	/**
 	 * Get all users.
@@ -30,7 +30,7 @@ export class UsersController {
 	@ApiResponse({ status: 401, description: "Unauthorized." })
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	findAll() {
-		return this.usersService.findAll();
+		return this.userService.findAll();
 	}
 
 	/**
@@ -45,7 +45,7 @@ export class UsersController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "User not found." })
 	findOne(@Param("id") id: string) {
-		return this.usersService.findOne(id);
+		return this.userService.findOne(id);
 	}
 
 	/**
@@ -59,7 +59,7 @@ export class UsersController {
 	@ApiResponse({ status: 400, description: "Bad request." })
 	@ApiResponse({ status: 409, description: "Email already exists." })
 	createUser(@Body() user: CreateUserDto) {
-		return this.usersService.createOne(user);
+		return this.userService.createOne(user);
 	}
 
 	/**
@@ -74,7 +74,7 @@ export class UsersController {
 	@ApiResponse({ status: 400, description: "Bad request." })
 	@ApiResponse({ status: 409, description: "Email already exists." })
 	createAdmin(@Body() user: CreateUserDto) {
-		return this.usersService.createOne(user, Role.Admin);
+		return this.userService.createOne(user, Role.Admin);
 	}
 
 	/**
@@ -90,7 +90,7 @@ export class UsersController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "User not found." })
 	updateSelf(@Req() req, @Body() updateUserDto: UpdateUserDto) {
-		return this.usersService.updateOne(req.user.id, updateUserDto);
+		return this.userService.updateOne(req.user.id, updateUserDto);
 	}
 
 	/**
@@ -107,7 +107,7 @@ export class UsersController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "User not found." })
 	updateOne(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-		return this.usersService.updateOne(id, updateUserDto);
+		return this.userService.updateOne(id, updateUserDto);
 	}
 
 	/**
@@ -122,7 +122,7 @@ export class UsersController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "User not found." })
 	deleteSelf(@Req() req) {
-		return this.usersService.deleteOne(req.user.id);
+		return this.userService.deleteOne(req.user.id);
 	}
 
 	/**
@@ -138,6 +138,6 @@ export class UsersController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "User not found." })
 	deleteOne(@Param("id") id: string) {
-		return this.usersService.deleteOne(id);
+		return this.userService.deleteOne(id);
 	}
 }

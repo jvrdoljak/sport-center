@@ -1,5 +1,5 @@
-import { Enrollment } from "src/enrollments/entities/enrollment.entity";
-import { Sport } from "src/sports/entities/sport.entity";
+import { Enrollment } from "src/enrollment/entities/enrollment.entity";
+import { Sport } from "src/sport/entities/sport.entity";
 import {
 	Column,
 	CreateDateColumn,

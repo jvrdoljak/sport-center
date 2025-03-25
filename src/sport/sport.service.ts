@@ -11,7 +11,7 @@ import { UpdateSportDto } from "./dto/update-sport.dto";
 import { Sport } from "./entities/sport.entity";
 
 @Injectable()
-export class SportsService {
+export class SportService {
 	constructor(
 		@InjectRepository(Sport)
 		private sportRepository: Repository<Sport>,

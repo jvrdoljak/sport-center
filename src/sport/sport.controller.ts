@@ -12,11 +12,11 @@ import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
 import { CreateSportDto } from "./dto/create-sport.dto";
 import { UpdateSportDto } from "./dto/update-sport.dto";
-import { SportsService } from "./sports.service";
+import { SportService } from "./sport.service";
 
-@Controller("sports")
-export class SportsController {
-	constructor(private readonly sportsService: SportsService) {}
+@Controller("sport")
+export class SportController {
+	constructor(private readonly sportService: SportService) {}
 
 	/**
 	 * Find all sports.
@@ -26,7 +26,7 @@ export class SportsController {
 	@ApiOperation({ summary: "Find all sports" })
 	@ApiResponse({ status: 200, description: "Return all sports." })
 	findAll() {
-		return this.sportsService.findAll();
+		return this.sportService.findAll();
 	}
 
 	/**
@@ -39,7 +39,7 @@ export class SportsController {
 	@ApiResponse({ status: 200, description: "Return the sport." })
 	@ApiResponse({ status: 404, description: "Sport not found." })
 	findOne(@Param("id") id: string) {
-		return this.sportsService.findOne(id);
+		return this.sportService.findOne(id);
 	}
 
 	/**
@@ -59,7 +59,7 @@ export class SportsController {
 		description: "Sport with this name already exists.",
 	})
 	createOne(@Body() sport: CreateSportDto) {
-		return this.sportsService.createOne(sport);
+		return this.sportService.createOne(sport);
 	}
 
 	/**
@@ -81,7 +81,7 @@ export class SportsController {
 		description: "Sport with this name already exists.",
 	})
 	updateOne(@Param("id") id: string, @Body() sport: UpdateSportDto) {
-		return this.sportsService.updateOne(id, sport);
+		return this.sportService.updateOne(id, sport);
 	}
 
 	/**
@@ -97,6 +97,6 @@ export class SportsController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "Sport not found." })
 	deleteOne(@Param("id") id: string) {
-		return this.sportsService.deleteOne(id);
+		return this.sportService.deleteOne(id);
 	}
 }

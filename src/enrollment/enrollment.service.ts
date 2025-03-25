@@ -5,17 +5,17 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ClassesService } from "src/classes/classes.service";
+import { ClassService } from "src/class/class.service";
 import type { Repository } from "typeorm";
 import type { CreateEnrollmentDto } from "./dto/create-enrollment.dto";
 import { Enrollment } from "./entities/enrollment.entity";
 
 @Injectable()
-export class EnrollmentsService {
+export class EnrollmentService {
 	constructor(
 		@InjectRepository(Enrollment)
-		private enrollmentsRepository: Repository<Enrollment>,
-		private classesService: ClassesService,
+		private enrollmentRepository: Repository<Enrollment>,
+		private classService: ClassService,
 	) {}
 
 	/**
@@ -29,10 +29,10 @@ export class EnrollmentsService {
 		createEnrollmentDto: CreateEnrollmentDto,
 	): Promise<Enrollment> {
 		// Check if the class exists
-		await this.classesService.findOne(createEnrollmentDto.classId);
+		await this.classService.findOne(createEnrollmentDto.classId);
 
 		// Check if the user is already enrolled in this class
-		const existingEnrollment = await this.enrollmentsRepository.findOne({
+		const existingEnrollment = await this.enrollmentRepository.findOne({
 			where: {
 				userId,
 				classId: createEnrollmentDto.classId,
@@ -44,7 +44,7 @@ export class EnrollmentsService {
 		}
 
 		// Check if the class has available spots
-		const availability = await this.classesService.checkAvailability(
+		const availability = await this.classService.checkAvailability(
 			createEnrollmentDto.classId,
 		);
 
@@ -52,12 +52,12 @@ export class EnrollmentsService {
 			throw new BadRequestException("Class is at full capacity");
 		}
 
-		const enrollment = this.enrollmentsRepository.create({
+		const enrollment = this.enrollmentRepository.create({
 			userId,
 			classId: createEnrollmentDto.classId,
 		});
 
-		return this.enrollmentsRepository.save(enrollment);
+		return this.enrollmentRepository.save(enrollment);
 	}
 
 	/**
@@ -65,7 +65,7 @@ export class EnrollmentsService {
 	 * @returns
 	 */
 	async findAll(): Promise<Enrollment[]> {
-		return this.enrollmentsRepository.find({
+		return this.enrollmentRepository.find({
 			relations: ["user", "class", "class.sport"],
 		});
 	}
@@ -76,7 +76,7 @@ export class EnrollmentsService {
 	 * @returns
 	 */
 	async findByUser(userId: string): Promise<Enrollment[]> {
-		return this.enrollmentsRepository.find({
+		return this.enrollmentRepository.find({
 			where: { userId },
 			relations: ["class", "class.sport"],
 		});
@@ -88,7 +88,7 @@ export class EnrollmentsService {
 	 * @returns
 	 */
 	async findByClass(classId: string): Promise<Enrollment[]> {
-		return this.enrollmentsRepository.find({
+		return this.enrollmentRepository.find({
 			where: { classId },
 			relations: [],
 		});
@@ -100,7 +100,7 @@ export class EnrollmentsService {
 	 * @returns
 	 */
 	async findOne(id: string): Promise<Enrollment> {
-		const enrollment = await this.enrollmentsRepository.findOne({
+		const enrollment = await this.enrollmentRepository.findOne({
 			where: { id },
 			relations: ["user", "class", "class.sport"],
 		});
@@ -125,6 +125,6 @@ export class EnrollmentsService {
 			throw new BadRequestException("Enrollment does not belong to the user");
 		}
 
-		await this.enrollmentsRepository.remove(enrollment);
+		await this.enrollmentRepository.remove(enrollment);
 	}
 }

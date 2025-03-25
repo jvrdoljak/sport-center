@@ -11,13 +11,13 @@ import {
 import { ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import { Roles } from "src/common/decorators/roles.decorator";
 import { Role } from "src/common/enums/role";
-import { ClassesService } from "./classes.service";
+import { ClassService } from "./class.service";
 import { CreateClassDto } from "./dto/create-class.dto";
 import { UpdateClassDto } from "./dto/update-class.dto";
 
-@Controller("classes")
-export class ClassesController {
-	constructor(private readonly classesService: ClassesService) {}
+@Controller("class")
+export class ClassController {
+	constructor(private readonly classService: ClassService) {}
 
 	/**
 	 * Find all classes filtered by sports.
@@ -33,7 +33,7 @@ export class ClassesController {
 	})
 	@ApiResponse({ status: 200, description: "Return all classes." })
 	findAll(@Query("sports") sports?: string) {
-		return this.classesService.findAll(sports);
+		return this.classService.findAll(sports);
 	}
 
 	/**
@@ -46,7 +46,7 @@ export class ClassesController {
 	@ApiResponse({ status: 200, description: "Return the class." })
 	@ApiResponse({ status: 404, description: "Class not found." })
 	findOne(@Param("id") id: string) {
-		return this.classesService.findOne(id);
+		return this.classService.findOne(id);
 	}
 
 	/**
@@ -63,7 +63,7 @@ export class ClassesController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "Sport not found." })
 	createOne(@Body() createClassDto: CreateClassDto) {
-		return this.classesService.createOne(createClassDto);
+		return this.classService.createOne(createClassDto);
 	}
 
 	/**
@@ -80,7 +80,7 @@ export class ClassesController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "Class not found." })
 	updateOne(@Param("id") id: string, @Body() updateClassDto: UpdateClassDto) {
-		return this.classesService.updateOne(id, updateClassDto);
+		return this.classService.updateOne(id, updateClassDto);
 	}
 
 	/**
@@ -96,7 +96,7 @@ export class ClassesController {
 	@ApiResponse({ status: 403, description: "Forbidden." })
 	@ApiResponse({ status: 404, description: "Class not found." })
 	deleteOne(@Param("id") id: string) {
-		return this.classesService.deleteOne(id);
+		return this.classService.deleteOne(id);
 	}
 
 	/**
@@ -109,6 +109,6 @@ export class ClassesController {
 	@ApiResponse({ status: 200, description: "Return class availability." })
 	@ApiResponse({ status: 404, description: "Class not found." })
 	checkAvailability(@Param("id") id: string) {
-		return this.classesService.checkAvailability(id);
+		return this.classService.checkAvailability(id);
 	}
 }

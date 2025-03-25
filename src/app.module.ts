@@ -6,7 +6,7 @@ import { AppInterceptor } from "./app.interceptor";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
-import { ClassesModule } from "./classes/classes.module";
+import { ClassModule } from "./class/class.module";
 import {
 	DATABASE_HOST,
 	DATABASE_NAME,
@@ -15,9 +15,9 @@ import {
 	DATABASE_USERNAME,
 } from "./common/config/config";
 import { RolesGuard } from "./common/guards/roles.guard";
-import { EnrollmentsModule } from "./enrollments/enrollments.module";
-import { SportsModule } from "./sports/sports.module";
-import { UsersModule } from "./users/users.module";
+import { EnrollmentModule } from "./enrollment/enrollment.module";
+import { SportModule } from "./sport/sport.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
 	imports: [
@@ -38,11 +38,11 @@ import { UsersModule } from "./users/users.module";
 				autoLoadEntities: true,
 			}),
 		}),
-		ClassesModule,
-		UsersModule,
+		ClassModule,
+		UserModule,
 		AuthModule,
-		SportsModule,
-		EnrollmentsModule,
+		SportModule,
+		EnrollmentModule,
 	],
 	controllers: [AppController],
 	providers: [

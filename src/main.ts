@@ -9,7 +9,7 @@ import {
 } from "./common/config/config";
 import { Role } from "./common/enums/role";
 import { logger } from "./logger";
-import { UsersService } from "./users/users.service";
+import { UserService } from "./user/user.service";
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, { logger });
@@ -22,7 +22,7 @@ async function bootstrap() {
 	);
 
 	// Create initial user on startup
-	const usersService = app.get(UsersService);
+	const usersService = app.get(UserService);
 	if (
 		await usersService.creatInitialAdminAccount(
 			{

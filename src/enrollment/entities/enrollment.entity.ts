@@ -1,5 +1,5 @@
-import { Class } from "src/classes/entities/class.entity";
-import { User } from "src/users/entitites/user.entity";
+import { Class } from "src/class/entities/class.entity";
+import { User } from "src/user/entitites/user.entity";
 import {
 	Column,
 	CreateDateColumn,
@@ -10,7 +10,7 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 
-@Entity("enrollments")
+@Entity("enrollment")
 export class Enrollment {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;

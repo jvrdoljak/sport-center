@@ -1,5 +1,5 @@
 import { Role } from "src/common/enums/role";
-import { Enrollment } from "src/enrollments/entities/enrollment.entity";
+import { Enrollment } from "src/enrollment/entities/enrollment.entity";
 import {
 	Column,
 	CreateDateColumn,

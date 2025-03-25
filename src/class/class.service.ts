@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { SportsService } from "src/sports/sports.service";
+import { SportService } from "src/sport/sport.service";
 import { In, Repository } from "typeorm";
 import { CreateClassDto } from "./dto/create-class.dto";
 import { UpdateClassDto } from "./dto/update-class.dto";
 import { Class } from "./entities/class.entity";
 
 @Injectable()
-export class ClassesService {
+export class ClassService {
 	constructor(
 		@InjectRepository(Class)
-		private classesRepository: Repository<Class>,
-		private sportsService: SportsService,
+		private classRepository: Repository<Class>,
+		private sportService: SportService,
 	) {}
 
 	/**
@@ -22,7 +22,7 @@ export class ClassesService {
 	async findAll(sports?: string): Promise<Array<Class>> {
 		if (sports) {
 			const sportNames = sports.split(",").map((s) => s.trim());
-			return this.classesRepository.find({
+			return this.classRepository.find({
 				relations: ["sport"],
 				where: {
 					sport: {
@@ -31,7 +31,7 @@ export class ClassesService {
 				},
 			});
 		}
-		return await this.classesRepository.find({
+		return await this.classRepository.find({
 			relations: ["sport"],
 		});
 	}
@@ -42,7 +42,7 @@ export class ClassesService {
 	 * @returns
 	 */
 	async findOne(id: string) {
-		const existingClass = await this.classesRepository.findOne({
+		const existingClass = await this.classRepository.findOne({
 			where: { id },
 			relations: ["sport"],
 		});
@@ -61,11 +61,11 @@ export class ClassesService {
 	 */
 	async createOne(createClassDto: CreateClassDto): Promise<Class> {
 		// Verify that the sport exists
-		await this.sportsService.findOne(createClassDto.sportId);
+		await this.sportService.findOne(createClassDto.sportId);
 
-		const createClass = this.classesRepository.create(createClassDto);
+		const createClass = this.classRepository.create(createClassDto);
 
-		return await this.classesRepository.save(createClass);
+		return await this.classRepository.save(createClass);
 	}
 
 	/**
@@ -75,7 +75,7 @@ export class ClassesService {
 	 * @returns
 	 */
 	async updateOne(id: string, updateClassDto: UpdateClassDto): Promise<Class> {
-		const existingClass = await this.classesRepository.findOneBy({ id });
+		const existingClass = await this.classRepository.findOneBy({ id });
 
 		if (updateClassDto.sportId) {
 			// Verify that the sport exists
@@ -87,7 +87,7 @@ export class ClassesService {
 		}
 
 		Object.assign(existingClass, updateClassDto);
-		return await this.classesRepository.save(existingClass);
+		return await this.classRepository.save(existingClass);
 	}
 
 	/**
@@ -95,7 +95,7 @@ export class ClassesService {
 	 * @param id
 	 */
 	async deleteOne(id: string): Promise<void> {
-		const result = await this.classesRepository.delete(id);
+		const result = await this.classRepository.delete(id);
 
 		if (result.affected === 0) {
 			throw new NotFoundException(`Class with ID ${id} not found`);
