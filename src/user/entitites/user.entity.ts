@@ -17,7 +17,7 @@ export class User {
 	@Column({ unique: true })
 	email: string;
 
-	@Column()
+	@Column({ select: false }) // Disable password on return. Use addSelect if you need.
 	password: string;
 
 	@Column()

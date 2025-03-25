@@ -15,7 +15,7 @@ import { User } from "./entitites/user.entity";
 export class UserService {
 	constructor(
 		@InjectRepository(User)
-		private usersRepository: Repository<User>,
+		private userRepository: Repository<User>,
 	) {}
 
 	/**
@@ -23,7 +23,7 @@ export class UserService {
 	 * @returns
 	 */
 	async findAll(): Promise<Array<User>> {
-		return await this.usersRepository.find({
+		return await this.userRepository.find({
 			relations: ["enrollments"],
 		});
 	}
@@ -34,7 +34,7 @@ export class UserService {
 	 * @returns
 	 */
 	async findOne(id: string): Promise<User> {
-		const user = await this.usersRepository.findOne({
+		const user = await this.userRepository.findOne({
 			where: { id },
 			relations: ["enrollments"],
 		});
@@ -51,7 +51,11 @@ export class UserService {
 	 * @returns
 	 */
 	async findByEmail(email: string): Promise<User | null> {
-		return await this.usersRepository.findOne({ where: { email } });
+		return await this.userRepository
+			.createQueryBuilder("user")
+			.addSelect("user.password")
+			.where("user.email = :email", { email })
+			.getOne();
 	}
 
 	/**
@@ -64,7 +68,7 @@ export class UserService {
 		createUserDto: CreateUserDto,
 		role: Role = Role.Admin,
 	): Promise<User | null> {
-		const existingUser = await this.usersRepository.findOne({
+		const existingUser = await this.userRepository.findOne({
 			where: { email: createUserDto.email },
 		});
 
@@ -74,13 +78,13 @@ export class UserService {
 
 		const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-		const user = this.usersRepository.create({
+		const user = this.userRepository.create({
 			...createUserDto,
 			password: hashedPassword,
 			role,
 		});
 
-		return this.usersRepository.save(user);
+		return this.userRepository.save(user);
 	}
 
 	/**
@@ -93,7 +97,7 @@ export class UserService {
 		createUserDto: CreateUserDto,
 		role: Role = Role.User,
 	): Promise<User> {
-		const existingUser = await this.usersRepository.findOne({
+		const existingUser = await this.userRepository.findOne({
 			where: { email: createUserDto.email },
 		});
 
@@ -103,13 +107,13 @@ export class UserService {
 
 		const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-		const user = this.usersRepository.create({
+		const user = this.userRepository.create({
 			...createUserDto,
 			password: hashedPassword,
 			role,
 		});
 
-		return this.usersRepository.save(user);
+		return this.userRepository.save(user);
 	}
 
 	/**
@@ -119,7 +123,7 @@ export class UserService {
 	 * @returns
 	 */
 	async updateOne(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-		const user = await this.usersRepository.findOneBy({ id });
+		const user = await this.userRepository.findOneBy({ id });
 
 		if (!user) {
 			throw new NotFoundException(`User with ID ${id} not found`);
@@ -131,7 +135,7 @@ export class UserService {
 
 		Object.assign(user, updateUserDto);
 
-		return this.usersRepository.save(user);
+		return this.userRepository.save(user);
 	}
 
 	/**
@@ -139,7 +143,7 @@ export class UserService {
 	 * @param id
 	 */
 	async deleteOne(id: string): Promise<void> {
-		const result = await this.usersRepository.delete({ id });
+		const result = await this.userRepository.delete({ id });
 
 		if (result.affected === 0) {
 			throw new NotFoundException(`User with ID ${id} not found`);
