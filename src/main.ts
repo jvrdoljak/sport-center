@@ -24,7 +24,7 @@ async function bootstrap() {
 	// Create initial user on startup
 	const usersService = app.get(UserService);
 	if (
-		await usersService.creatInitialAdminAccount(
+		await usersService.createInitialAccount(
 			{
 				email: INITIAL_ADMIN_EMAIL,
 				password: INITIAL_ADMIN_PASSWORD,

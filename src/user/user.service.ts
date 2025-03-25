@@ -60,9 +60,9 @@ export class UserService {
 	 * @param role
 	 * @returns
 	 */
-	async creatInitialAdminAccount(
+	async createInitialAccount(
 		createUserDto: CreateUserDto,
-		role: Role = Role.User,
+		role: Role = Role.Admin,
 	): Promise<User | null> {
 		const existingUser = await this.usersRepository.findOne({
 			where: { email: createUserDto.email },
