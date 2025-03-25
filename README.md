@@ -39,6 +39,7 @@ JWT_SECRET
 Run these commands:
 
 ```bash
+docker network create sport-network
 docker-compose up -d mysql
 nvm use
 npm install
@@ -62,6 +63,7 @@ JWT_SECRET
 ```
 Run these commands:
 ```bash
+docker network create sport-network
 docker-compose up --build
 ```
 
