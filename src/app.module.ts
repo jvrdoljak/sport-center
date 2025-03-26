@@ -30,12 +30,7 @@ import { UserModule } from "./user/user.module";
 				password: DATABASE_PASSWORD,
 				database: DATABASE_NAME,
 				entities: [__dirname + "/**/*.entity{.ts,.js}"],
-				synchronize: true,
 				migrations: ["src/migrations/*.ts"],
-				cli: {
-					migrationsDir: "src/migrations",
-				},
-				autoLoadEntities: true,
 			}),
 		}),
 		ClassModule,

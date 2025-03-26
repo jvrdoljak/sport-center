@@ -21,6 +21,7 @@ services:
   sport:
     build: .
     container_name: sport-app
+    command: sh -c "pnpm migration:run && pnpm start:prod"
     environment:
       - DB_HOST=${DATABASE_HOST}
       - DB_PORT=${DATABASE_PORT}

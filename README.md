@@ -42,7 +42,7 @@ Run these commands:
 docker network create sport-network
 docker-compose up -d mysql
 nvm use
-npm install
+pnpm install
 ```
 
 ### Prod mode
@@ -64,31 +64,27 @@ JWT_SECRET
 Run these commands:
 ```bash
 docker network create sport-network
-docker-compose up --build
+docker-compose up -d mysql
+docker-compose up sport
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ npm run start
+$ pnpm start
 
 # watch mode
-$ npm run start:dev
+$ pnpm start:dev
 
 # production mode
-$ npm run start:prod
+$ pnpm start:prod
 ```
-
-## Run tests
-
+## Database
+### Migrations 
+To generate migration run: 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+pnpm migration:generate src/db/migrations/[migration-name] --dataSource src/db/data-source.ts
 ```
+
+Replace [migration-name]. E.g.: ```src/db/migrations/InitialMigration ```
