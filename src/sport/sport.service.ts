@@ -5,7 +5,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { CreateSportDto } from "./dto/create-sport.dto";
 import { UpdateSportDto } from "./dto/update-sport.dto";
 import { Sport } from "./entities/sport.entity";
@@ -30,7 +30,7 @@ export class SportService {
 	 * @param id
 	 * @returns
 	 */
-	async findOne(id: string): Promise<Sport> {
+	async findOne(id: string): Promise<Sport | null> {
 		const sport = await this.sportRepository.findOne({
 			where: { id },
 			relations: ["classes"],
@@ -79,18 +79,20 @@ export class SportService {
 
 		return await this.sportRepository.save(existingSport);
 	}
+
 	/**
-	 * Delete sport identified by id.
+	 *
 	 * @param id
+	 * @returns
 	 */
-	async deleteOne(id: string): Promise<void> {
+	async deleteOne(id: string): Promise<DeleteResult> {
 		const sport = await this.findOne(id);
 
 		if (!sport) {
 			throw new NotFoundException(`Sport with ID ${id} not found`);
 		}
 
-		if (sport.classes.length > 0) {
+		if (sport.classes && sport.classes.length > 0) {
 			throw new BadRequestException(`Sport with ID: ${id} has active classes.`);
 		}
 
@@ -99,5 +101,7 @@ export class SportService {
 		if (result.affected === 0) {
 			throw new NotFoundException(`Sport with ID ${id} not found`);
 		}
+
+		return result;
 	}
 }

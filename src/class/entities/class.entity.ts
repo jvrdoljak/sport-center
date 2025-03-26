@@ -40,7 +40,7 @@ export class Class {
 	sport: Sport;
 
 	@OneToMany(() => Enrollment, (enrollment) => enrollment.class)
-	enrollments: Enrollment[];
+	enrollments: Enrollment[] | null;
 
 	@CreateDateColumn()
 	createdAt: Date;

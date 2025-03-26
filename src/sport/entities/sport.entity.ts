@@ -17,7 +17,7 @@ export class Sport {
 	name: string;
 
 	@OneToMany(() => Class, (sportClass) => sportClass.sport)
-	classes: Class[];
+	classes: Class[] | null;
 
 	@CreateDateColumn()
 	createdAt: Date;
