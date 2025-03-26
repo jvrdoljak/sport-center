@@ -7,6 +7,7 @@ const config: Config = {
 
   },
   testEnvironment: 'node',
+  testPathIgnorePatterns: ['/node_modules', '/dist']
 };
 
 export default config;

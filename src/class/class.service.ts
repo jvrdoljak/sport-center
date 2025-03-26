@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SportService } from "src/sport/sport.service";
-import { In, Repository } from "typeorm";
+import { DeleteResult, In, Repository } from "typeorm";
 import { CreateClassDto } from "./dto/create-class.dto";
 import { UpdateClassDto } from "./dto/update-class.dto";
 import { Class } from "./entities/class.entity";
@@ -75,15 +75,11 @@ export class ClassService {
 	 * @returns
 	 */
 	async updateOne(id: string, updateClassDto: UpdateClassDto): Promise<Class> {
-		const existingClass = await this.classRepository.findOneBy({ id });
+		const existingClass = await this.findOne(id);
 
 		if (updateClassDto.sportId) {
 			// Verify that the sport exists
 			await this.findOne(updateClassDto.sportId);
-		}
-
-		if (!existingClass) {
-			throw new NotFoundException(`Class with ID ${id} is not found.`);
 		}
 
 		Object.assign(existingClass, updateClassDto);
@@ -94,12 +90,14 @@ export class ClassService {
 	 * Delete class identified by id.
 	 * @param id
 	 */
-	async deleteOne(id: string): Promise<void> {
+	async deleteOne(id: string): Promise<DeleteResult> {
 		const result = await this.classRepository.delete(id);
 
 		if (result.affected === 0) {
 			throw new NotFoundException(`Class with ID ${id} not found`);
 		}
+
+		return result;
 	}
 
 	/**

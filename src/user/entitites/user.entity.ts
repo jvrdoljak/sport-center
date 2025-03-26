@@ -24,7 +24,7 @@ export class User {
 	role: Role;
 
 	@OneToMany(() => Enrollment, (enrollment) => enrollment.user)
-	enrollments: Enrollment[];
+	enrollments: Enrollment[] | null;
 
 	@CreateDateColumn()
 	createdAt: Date;

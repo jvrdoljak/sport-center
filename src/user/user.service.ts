@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcryptjs";
 import { Role } from "src/common/enums/role";
-import { Repository } from "typeorm";
+import { DeleteResult, Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entitites/user.entity";
@@ -142,11 +142,13 @@ export class UserService {
 	 * Delete user identified by id.
 	 * @param id
 	 */
-	async deleteOne(id: string): Promise<void> {
+	async deleteOne(id: string): Promise<DeleteResult> {
 		const result = await this.userRepository.delete({ id });
 
 		if (result.affected === 0) {
 			throw new NotFoundException(`User with ID ${id} not found`);
 		}
+
+		return result;
 	}
 }
