@@ -7,6 +7,8 @@ import { SportService } from "src/sport/sport.service";
 import { User } from "src/user/entitites/user.entity";
 import { Repository } from "typeorm";
 import { ClassService } from "./class.service";
+import { CreateClassDto } from "./dto/create-class.dto";
+import { UpdateClassDto } from "./dto/update-class.dto";
 import { Class } from "./entities/class.entity";
 
 const mockSport = {
@@ -60,6 +62,27 @@ const mockEnrollment: Enrollment = {
 	createdAt: new Date(),
 	updatedAt: new Date(),
 };
+
+const mockUpdateClassDto: UpdateClassDto = {
+	schedule: [
+		{
+			day: "Monday",
+			startTime: "10:00",
+			endTime: "12:00",
+		},
+		{
+			day: "Wednesday",
+			startTime: "14:00",
+			endTime: "16:00",
+		},
+	],
+	durationMins: 45,
+	description: "Footballtraining",
+	sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	capacity: 10,
+};
+
+const mockCreateClassDto = mockUpdateClassDto as CreateClassDto;
 
 describe("ClassService", () => {
 	let classService: ClassService;
@@ -138,61 +161,23 @@ describe("ClassService", () => {
 
 	describe("createOne", () => {
 		it("should create a class", async () => {
-			const createClassDto = {
-				schedule: [
-					{
-						day: "Monday",
-						startTime: "10:00",
-						endTime: "12:00",
-					},
-					{
-						day: "Wednesday",
-						startTime: "14:00",
-						endTime: "16:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				capacity: 10,
-			};
-
 			jest.spyOn(sportService, "findOne").mockResolvedValue(mockSport);
 			jest.spyOn(classRepository, "create").mockReturnValue(mockClass);
 			jest.spyOn(classRepository, "save").mockResolvedValue(mockClass);
 
-			const result = await classService.createOne(createClassDto);
+			const result = await classService.createOne(mockCreateClassDto);
 			expect(result).toEqual(mockClass);
 		});
 
 		it("should throw an error if sport does not exist", async () => {
-			const createClassDto = {
-				schedule: [
-					{
-						day: "Monday",
-						startTime: "10:00",
-						endTime: "12:00",
-					},
-					{
-						day: "Wednesday",
-						startTime: "14:00",
-						endTime: "16:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				sportId: mockSport.id,
-				capacity: 10,
-			};
-
 			jest.spyOn(sportService, "findOne").mockResolvedValue(null);
 
 			try {
-				await classService.createOne(createClassDto);
+				await classService.createOne(mockCreateClassDto);
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
 				expect(error.message).toBe(
-					`Sport with ID ${createClassDto.sportId} is not found.`,
+					`Sport with ID ${mockCreateClassDto.sportId} is not found.`,
 				);
 			}
 		});
@@ -200,58 +185,23 @@ describe("ClassService", () => {
 
 	describe("updateOne", () => {
 		it("should update a class", async () => {
-			const updateClassDto = {
-				schedule: [
-					{
-						day: "Monday",
-						startTime: "10:00",
-						endTime: "12:00",
-					},
-					{
-						day: "Wednesday",
-						startTime: "14:00",
-						endTime: "16:00",
-					},
-				],
-				durationMins: 45,
-				description: "Footballtraining",
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				capacity: 10,
-			};
-
 			jest.spyOn(classService, "findOne").mockResolvedValue(mockClass);
 			jest.spyOn(sportService, "findOne").mockResolvedValue(mockSport);
 			jest
 				.spyOn(classRepository, "save")
-				.mockResolvedValue({ ...mockClass, ...updateClassDto });
+				.mockResolvedValue({ ...mockClass, ...mockUpdateClassDto });
 
-			const result = await classService.updateOne(mockClass.id, updateClassDto);
+			const result = await classService.updateOne(
+				mockClass.id,
+				mockUpdateClassDto,
+			);
 			expect(result.durationMins).toEqual(45);
 			expect(result.capacity).toEqual(10);
 		});
 
 		it("should throw an error if class is not found", async () => {
-			const updateClassDto = {
-				schedule: [
-					{
-						day: "Monday",
-						startTime: "10:00",
-						endTime: "12:00",
-					},
-					{
-						day: "Wednesday",
-						startTime: "14:00",
-						endTime: "16:00",
-					},
-				],
-				durationMins: 45,
-				description: "Footballtraining",
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				capacity: 10,
-			};
-
 			try {
-				await classService.updateOne(mockClass.id, updateClassDto);
+				await classService.updateOne(mockClass.id, mockUpdateClassDto);
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
 				expect(error.message).toBe(
