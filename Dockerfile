@@ -2,14 +2,16 @@ FROM node:22
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-RUN npm install
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN pnpm build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
+CMD ["pnpm", "start:prod"]
