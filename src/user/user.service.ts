@@ -4,7 +4,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { Role } from "src/common/enums/role";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/create-user.dto";
