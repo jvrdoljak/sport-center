@@ -89,3 +89,13 @@ pnpm migration:generate src/db/migrations/[migration-name] --dataSource src/db/d
 ```
 
 Replace [migration-name]. E.g.: ```src/db/migrations/InitialMigration ```
+
+## Test
+
+```bash
+pnpm test
+```
+Test with cache clear:
+```bash
+pnpm test:cache
+```
