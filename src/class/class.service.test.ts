@@ -4,9 +4,62 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { Role } from "src/common/enums/role";
 import { Enrollment } from "src/enrollment/entities/enrollment.entity";
 import { SportService } from "src/sport/sport.service";
+import { User } from "src/user/entitites/user.entity";
 import { Repository } from "typeorm";
 import { ClassService } from "./class.service";
 import { Class } from "./entities/class.entity";
+
+const mockSport = {
+	id: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	name: "Football",
+	classes: null,
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+};
+
+const mockClass = {
+	id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
+	schedule: [
+		{
+			day: "Monday",
+			endTime: "12:00",
+			startTime: "10:00",
+		},
+		{
+			day: "Wednesday",
+			endTime: "16:00",
+			startTime: "14:00",
+		},
+	],
+	durationMins: 60,
+	description: "Footballtraining",
+	capacity: 10,
+	sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	sport: mockSport,
+	enrollments: null,
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+};
+
+const mockUser: User = {
+	id: "7af60664-b15d-4b1e-b924-98e0698e07f4",
+	email: "test@test.com",
+	role: Role.User,
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+	enrollments: null,
+	password: "",
+};
+
+const mockEnrollment: Enrollment = {
+	id: "13924acf-902b-42d7-a642-9300f43c7c80",
+	userId: "7af60664-b15d-4b1e-b924-98e0698e07f4",
+	classId: "999269b8-8cb4-4edd-920b-ccdf69ed45ez",
+	user: mockUser,
+	class: mockClass,
+	createdAt: new Date(),
+	updatedAt: new Date(),
+};
 
 describe("ClassService", () => {
 	let classService: ClassService;
@@ -47,122 +100,25 @@ describe("ClassService", () => {
 
 	describe("findAll", () => {
 		it("should return all classes", async () => {
-			const mockClasses = [
-				{
-					id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-					schedule: [
-						{
-							day: "Monday",
-							endTime: "12:00",
-							startTime: "10:00",
-						},
-						{
-							day: "Wednesday",
-							endTime: "16:00",
-							startTime: "14:00",
-						},
-					],
-					durationMins: 60,
-					description: "Footballtraining",
-					capacity: 10,
-					sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					sport: {
-						id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-						name: "Football",
-
-						createdAt: new Date(),
-						modifiedAt: new Date(),
-						classes: null,
-					},
-					enrollments: null,
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-				},
-			];
-			jest.spyOn(classRepository, "find").mockResolvedValue(mockClasses);
+			jest.spyOn(classRepository, "find").mockResolvedValue([mockClass]);
 
 			const result = await classService.findAll();
-			expect(result).toEqual(mockClasses);
+			expect(result).toEqual([mockClass]);
 		});
 
 		it("should return classes filtered by sports", async () => {
-			const mockClasses = [
-				{
-					id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-					schedule: [
-						{
-							day: "Monday",
-							endTime: "12:00",
-							startTime: "10:00",
-						},
-						{
-							day: "Wednesday",
-							endTime: "16:00",
-							startTime: "14:00",
-						},
-					],
-					durationMins: 60,
-					description: "Footballtraining",
-					capacity: 10,
-					sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					sport: {
-						id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-						name: "Football",
-
-						createdAt: new Date(),
-						modifiedAt: new Date(),
-						classes: null,
-					},
-					enrollments: null,
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-				},
-			];
-			jest.spyOn(classRepository, "find").mockResolvedValue(mockClasses);
+			jest.spyOn(classRepository, "find").mockResolvedValue([mockClass]);
 
 			const result = await classService.findAll("Football");
-			expect(result).toEqual(mockClasses);
+			expect(result).toEqual([mockClass]);
 		});
 	});
 
 	describe("findOne", () => {
 		it("should return a class by id", async () => {
-			const mockClass = {
-				id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-				schedule: [
-					{
-						day: "Monday",
-						endTime: "12:00",
-						startTime: "10:00",
-					},
-					{
-						day: "Wednesday",
-						endTime: "16:00",
-						startTime: "14:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				capacity: 10,
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				sport: {
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
-
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-					classes: null,
-				},
-				enrollments: null,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
 			jest.spyOn(classRepository, "findOne").mockResolvedValue(mockClass);
 
-			const result = await classService.findOne(
-				"999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-			);
+			const result = await classService.findOne(mockClass.id);
 			expect(result).toEqual(mockClass);
 		});
 
@@ -170,11 +126,11 @@ describe("ClassService", () => {
 			jest.spyOn(classRepository, "findOne").mockResolvedValue(null);
 
 			try {
-				await classService.findOne("999269b8-8cb4-4edd-920b-ccdf69ed45ed");
+				await classService.findOne(mockClass.id);
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
 				expect(error.message).toBe(
-					"Class with ID 999269b8-8cb4-4edd-920b-ccdf69ed45ed is not found.",
+					`Class with ID ${mockClass.id} is not found.`,
 				);
 			}
 		});
@@ -200,46 +156,8 @@ describe("ClassService", () => {
 				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
 				capacity: 10,
 			};
-			const mockClass = {
-				id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-				schedule: [
-					{
-						day: "Monday",
-						endTime: "12:00",
-						startTime: "10:00",
-					},
-					{
-						day: "Wednesday",
-						endTime: "16:00",
-						startTime: "14:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				capacity: 10,
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				sport: {
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
 
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-					classes: null,
-				},
-				enrollments: null,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
-			const sportResult = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
-			jest.spyOn(sportService, "findOne").mockResolvedValue(sportResult);
+			jest.spyOn(sportService, "findOne").mockResolvedValue(mockSport);
 			jest.spyOn(classRepository, "create").mockReturnValue(mockClass);
 			jest.spyOn(classRepository, "save").mockResolvedValue(mockClass);
 
@@ -263,7 +181,7 @@ describe("ClassService", () => {
 				],
 				durationMins: 60,
 				description: "Footballtraining",
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
+				sportId: mockSport.id,
 				capacity: 10,
 			};
 
@@ -274,7 +192,7 @@ describe("ClassService", () => {
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
 				expect(error.message).toBe(
-					"Sport with ID 8013276f-d504-4373-a2de-aa7d006c07d8 is not found.",
+					`Sport with ID ${createClassDto.sportId} is not found.`,
 				);
 			}
 		});
@@ -300,55 +218,14 @@ describe("ClassService", () => {
 				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
 				capacity: 10,
 			};
-			const mockClass = {
-				id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-				schedule: [
-					{
-						day: "Monday",
-						endTime: "12:00",
-						startTime: "10:00",
-					},
-					{
-						day: "Wednesday",
-						endTime: "16:00",
-						startTime: "14:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				capacity: 15,
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				sport: {
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
-
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-					classes: null,
-				},
-				enrollments: null,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
-			const sportResult = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: null,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
 
 			jest.spyOn(classService, "findOne").mockResolvedValue(mockClass);
-			jest.spyOn(sportService, "findOne").mockResolvedValue(sportResult);
+			jest.spyOn(sportService, "findOne").mockResolvedValue(mockSport);
 			jest
 				.spyOn(classRepository, "save")
 				.mockResolvedValue({ ...mockClass, ...updateClassDto });
 
-			const result = await classService.updateOne(
-				"999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-				updateClassDto,
-			);
+			const result = await classService.updateOne(mockClass.id, updateClassDto);
 			expect(result.durationMins).toEqual(45);
 			expect(result.capacity).toEqual(10);
 		});
@@ -374,14 +251,11 @@ describe("ClassService", () => {
 			};
 
 			try {
-				await classService.updateOne(
-					"999269b8-8cb4-4edd-920b-ccdf69ed45ef",
-					updateClassDto,
-				);
+				await classService.updateOne(mockClass.id, updateClassDto);
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
 				expect(error.message).toBe(
-					"Class with ID 999269b8-8cb4-4edd-920b-ccdf69ed45ef is not found.",
+					`Class with ID ${mockClass.id} is not found.`,
 				);
 			}
 		});
@@ -396,8 +270,8 @@ describe("ClassService", () => {
 
 			jest.spyOn(classRepository, "delete").mockResolvedValue(result);
 
-			await classService.deleteOne("1");
-			expect(classRepository.delete).toHaveBeenCalledWith("1");
+			await classService.deleteOne(mockClass.id);
+			expect(classRepository.delete).toHaveBeenCalledWith(mockClass.id);
 		});
 
 		it("should throw an error if class is not found", async () => {
@@ -408,105 +282,23 @@ describe("ClassService", () => {
 			jest.spyOn(classRepository, "delete").mockResolvedValue(result);
 
 			try {
-				await classService.deleteOne("999269b8-8cb4-4edd-920b-ccdf69ed45ed");
+				await classService.deleteOne(mockClass.id);
 			} catch (error) {
 				expect(error).toBeInstanceOf(NotFoundException);
-				expect(error.message).toBe(
-					"Class with ID 999269b8-8cb4-4edd-920b-ccdf69ed45ed not found",
-				);
+				expect(error.message).toBe(`Class with ID ${mockClass.id} not found`);
 			}
 		});
 	});
 
 	describe("checkAvailability", () => {
 		it("should check if a class has availability", async () => {
-			const enrollmentsClass = {
-				id: "999269b8-8cb4-4edd-920b-ccdf69ed45ez",
-				schedule: [
-					{
-						day: "Monday",
-						endTime: "12:00",
-						startTime: "10:00",
-					},
-					{
-						day: "Wednesday",
-						endTime: "16:00",
-						startTime: "14:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				capacity: 10,
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				sport: {
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-					classes: null,
-				},
-				enrollments: null,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
+			jest
+				.spyOn(classService, "findOne")
+				.mockResolvedValue({ ...mockClass, enrollments: [mockEnrollment] });
 
-			const enrollments: Enrollment[] = [
-				{
-					id: "13924acf-902b-42d7-a642-9300f43c7c80",
-					userId: "7af60664-b15d-4b1e-b924-98e0698e07f4",
-					classId: "999269b8-8cb4-4edd-920b-ccdf69ed45ez",
-					user: {
-						id: "7af60664-b15d-4b1e-b924-98e0698e07f4",
-						email: "test@jvrd.com",
-						role: Role.Admin,
-						createdAt: new Date(),
-						modifiedAt: new Date(),
-						enrollments: null,
-						password: "",
-					},
-					class: enrollmentsClass,
-					createdAt: new Date(),
-					updatedAt: new Date(),
-				},
-			];
-
-			const mockClass = {
-				id: "999269b8-8cb4-4edd-920b-ccdf69ed45ez",
-				schedule: [
-					{
-						day: "Monday",
-						endTime: "12:00",
-						startTime: "10:00",
-					},
-					{
-						day: "Wednesday",
-						endTime: "16:00",
-						startTime: "14:00",
-					},
-				],
-				durationMins: 60,
-				description: "Footballtraining",
-				capacity: 10,
-				sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				sport: {
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-					classes: null,
-				},
-				enrollments: enrollments,
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
-			jest.spyOn(classService, "findOne").mockResolvedValue(mockClass);
-
-			const result = await classService.checkAvailability(
-				"999269b8-8cb4-4edd-920b-ccdf69ed45ez",
-			);
+			const result = await classService.checkAvailability(mockClass.id);
 			expect(result.available).toBe(true);
-			expect(result.capacity).toBe(10);
+			expect(result.capacity).toBe(mockClass.capacity);
 			expect(result.enrolled).toBe(1);
 		});
 	});

@@ -5,11 +5,52 @@ import {
 } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { Class } from "src/class/entities/class.entity";
 import { Repository } from "typeorm";
 import { CreateSportDto } from "./dto/create-sport.dto";
 import { UpdateSportDto } from "./dto/update-sport.dto";
 import { Sport } from "./entities/sport.entity";
 import { SportService } from "./sport.service";
+
+const mockSport: Sport = {
+	id: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	name: "Football",
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+	classes: null,
+};
+
+const mockClass: Class = {
+	id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
+	schedule: [
+		{
+			day: "Monday",
+			endTime: "12:00",
+			startTime: "10:00",
+		},
+		{
+			day: "Wednesday",
+			endTime: "16:00",
+			startTime: "14:00",
+		},
+	],
+	durationMins: 60,
+	description: "Footballtraining",
+	capacity: 10,
+	sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	sport: mockSport,
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+	enrollments: null,
+};
+
+const mockClassSport = {
+	id: "8013276f-d504-4373-a2de-aa7d006c07d8",
+	name: "Football",
+	classes: [mockClass],
+	createdAt: new Date(),
+	modifiedAt: new Date(),
+};
 
 describe("SportService", () => {
 	let service: SportService;
@@ -32,46 +73,28 @@ describe("SportService", () => {
 
 	describe("findAll", () => {
 		it("should return an array of sports", async () => {
-			const result = [
-				{
-					id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-					name: "Football",
-					classes: [],
-					createdAt: new Date(),
-					modifiedAt: new Date(),
-				},
-			];
-			jest.spyOn(repository, "find").mockResolvedValue(result);
+			jest.spyOn(repository, "find").mockResolvedValue([mockSport]);
 
-			expect(await service.findAll()).toBe(result);
+			expect(await service.findAll()).toStrictEqual([mockSport]);
 		});
 	});
 
 	describe("findOne", () => {
 		it("should return a sport by id", async () => {
-			const result = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-			jest.spyOn(repository, "findOne").mockResolvedValue(result);
+			jest.spyOn(repository, "findOne").mockResolvedValue(mockSport);
 
-			expect(
-				await service.findOne("8013276f-d504-4373-a2de-aa7d006c07d8"),
-			).toBe(result);
+			expect(await service.findOne(mockSport.id)).toStrictEqual(mockSport);
 		});
 
 		it("should throw an error if sport is not found", async () => {
 			jest.spyOn(repository, "findOne").mockResolvedValue(null);
 
 			try {
-				await service.findOne("8013276f-d504-4373-a2de-aa7d006c07d8");
+				await service.findOne(mockSport.id);
 			} catch (e) {
 				expect(e).toBeInstanceOf(NotFoundException);
 				expect(e.response.message).toBe(
-					"Sport with ID: 8013276f-d504-4373-a2de-aa7d006c07d8 is not found",
+					`Sport with ID: ${mockSport.id} is not found`,
 				);
 			}
 		});
@@ -80,37 +103,23 @@ describe("SportService", () => {
 	describe("createOne", () => {
 		it("should create a new sport", async () => {
 			const createSportDto: CreateSportDto = { name: "Football" };
-			const result = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
 			jest.spyOn(repository, "findOneBy").mockResolvedValue(null);
-			jest.spyOn(repository, "create").mockReturnValue(result);
-			jest.spyOn(repository, "save").mockResolvedValue(result);
+			jest.spyOn(repository, "create").mockReturnValue(mockSport);
+			jest.spyOn(repository, "save").mockResolvedValue(mockSport);
 
-			expect(await service.createOne(createSportDto)).toBe(result);
+			expect(await service.createOne(createSportDto)).toBe(mockSport);
 		});
 
 		it("should throw ConflictException if sport already exists", async () => {
 			const createSportDto: CreateSportDto = { name: "Football" };
-			const existingSport = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-			jest.spyOn(repository, "findOneBy").mockResolvedValue(existingSport);
+			jest.spyOn(repository, "findOneBy").mockResolvedValue(mockSport);
 
 			try {
 				await service.createOne(createSportDto);
 			} catch (e) {
 				expect(e).toBeInstanceOf(ConflictException);
 				expect(e.response.message).toBe(
-					"Sport named: Football already exists.",
+					`Sport named: ${createSportDto.name} already exists.`,
 				);
 			}
 		});
@@ -119,23 +128,13 @@ describe("SportService", () => {
 	describe("updateOne", () => {
 		it("should update a sport", async () => {
 			const updateSportDto: UpdateSportDto = { name: "Updated Football" };
-			const existingSport = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-			const updatedSport = { ...existingSport, ...updateSportDto };
-			jest.spyOn(repository, "findOneBy").mockResolvedValue(existingSport);
+			const updatedSport = { ...mockSport, ...updateSportDto };
+			jest.spyOn(repository, "findOneBy").mockResolvedValue(mockSport);
 			jest.spyOn(repository, "save").mockResolvedValue(updatedSport);
 
-			expect(
-				await service.updateOne(
-					"8013276f-d504-4373-a2de-aa7d006c07d8",
-					updateSportDto,
-				),
-			).toBe(updatedSport);
+			expect(await service.updateOne(mockSport.id, updateSportDto)).toBe(
+				updatedSport,
+			);
 		});
 
 		it("should throw NotFoundException if sport not found", async () => {
@@ -143,14 +142,11 @@ describe("SportService", () => {
 			jest.spyOn(repository, "findOneBy").mockResolvedValue(null);
 
 			try {
-				await service.updateOne(
-					"8013276f-d504-4373-a2de-aa7d006c07d8",
-					updateSportDto,
-				);
+				await service.updateOne(mockSport.id, updateSportDto);
 			} catch (e) {
 				expect(e).toBeInstanceOf(NotFoundException);
 				expect(e.response.message).toBe(
-					"Sport with id: 8013276f-d504-4373-a2de-aa7d006c07d8 doesn't exist.",
+					`Sport with id: ${mockSport.id} doesn't exist.`,
 				);
 			}
 		});
@@ -162,70 +158,25 @@ describe("SportService", () => {
 				raw: [],
 				affected: 1,
 			};
-			const sport = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-			jest.spyOn(service, "findOne").mockResolvedValue(sport);
+
+			jest.spyOn(service, "findOne").mockResolvedValue(mockSport);
 			jest.spyOn(repository, "delete").mockResolvedValue(result);
 
-			await service.deleteOne("8013276f-d504-4373-a2de-aa7d006c07d8");
+			await service.deleteOne(mockSport.id);
 			expect(repository.delete).toHaveBeenCalledWith({
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
+				id: mockSport.id,
 			});
 		});
 
 		it("should throw BadRequestException if sport has active classes", async () => {
-			const sportFromClass = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-			const sport: Sport = {
-				id: "8013276f-d504-4373-a2de-aa7d006c07d8",
-				name: "Football",
-				classes: [
-					{
-						id: "999269b8-8cb4-4edd-920b-ccdf69ed45ed",
-						sport: sportFromClass,
-						schedule: [
-							{
-								day: "Monday",
-								endTime: "12:00",
-								startTime: "10:00",
-							},
-							{
-								day: "Wednesday",
-								endTime: "16:00",
-								startTime: "14:00",
-							},
-						],
-						enrollments: null,
-						durationMins: 60,
-						description: "Footballtraining",
-						capacity: 10,
-						sportId: "8013276f-d504-4373-a2de-aa7d006c07d8",
-						createdAt: new Date(),
-						modifiedAt: new Date(),
-					},
-				],
-				createdAt: new Date(),
-				modifiedAt: new Date(),
-			};
-
-			jest.spyOn(service, "findOne").mockResolvedValue(sport);
+			jest.spyOn(service, "findOne").mockResolvedValue(mockClassSport);
 
 			try {
-				await service.deleteOne("8013276f-d504-4373-a2de-aa7d006c07d8");
+				await service.deleteOne(mockClassSport.id);
 			} catch (e) {
 				expect(e).toBeInstanceOf(BadRequestException);
 				expect(e.response.message).toBe(
-					"Sport with ID: 8013276f-d504-4373-a2de-aa7d006c07d8 has active classes.",
+					`Sport with ID: ${mockClassSport.id} has active classes.`,
 				);
 			}
 		});
@@ -234,11 +185,11 @@ describe("SportService", () => {
 			jest.spyOn(service, "findOne").mockResolvedValue(null);
 
 			try {
-				await service.deleteOne("8013276f-d504-4373-a2de-aa7d006c07d8");
+				await service.deleteOne(mockSport.id);
 			} catch (e) {
 				expect(e).toBeInstanceOf(NotFoundException);
 				expect(e.response.message).toBe(
-					"Sport with ID 8013276f-d504-4373-a2de-aa7d006c07d8 not found",
+					`Sport with ID ${mockSport.id} not found`,
 				);
 			}
 		});

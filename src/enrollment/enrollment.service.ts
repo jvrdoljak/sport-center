@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ClassService } from "src/class/class.service";
-import type { Repository } from "typeorm";
+import type { DeleteResult, Repository } from "typeorm";
 import type { CreateEnrollmentDto } from "./dto/create-enrollment.dto";
 import { Enrollment } from "./entities/enrollment.entity";
 
@@ -39,7 +39,7 @@ export class EnrollmentService {
 			},
 		});
 
-		if (existingEnrollment) {
+		if (!!existingEnrollment) {
 			throw new ConflictException("User is already enrolled in this class");
 		}
 
@@ -117,7 +117,7 @@ export class EnrollmentService {
 	 * @param id
 	 * @param userId
 	 */
-	async delete(id: string, userId: string): Promise<void> {
+	async delete(id: string, userId: string): Promise<DeleteResult> {
 		const enrollment = await this.findOne(id);
 
 		// Check if the enrollment belongs to the user
@@ -125,6 +125,6 @@ export class EnrollmentService {
 			throw new BadRequestException("Enrollment does not belong to the user");
 		}
 
-		await this.enrollmentRepository.remove(enrollment);
+		return await this.enrollmentRepository.delete(id);
 	}
 }
