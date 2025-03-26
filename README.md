@@ -43,6 +43,7 @@ docker network create sport-network
 docker-compose up -d mysql
 nvm use
 pnpm install
+pnpm migration:run
 ```
 
 ### Prod mode
