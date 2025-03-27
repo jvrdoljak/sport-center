@@ -22,9 +22,11 @@
     "typeorm": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli",
     "migration:generate": "pnpm typeorm migration:generate",
     "migration:run": "pnpm typeorm migration:run --dataSource src/db/data-source.ts",
-    "migration:revert": "pnpm typeorm migration:revert --dataSource src/db/data-source.ts"
+    "migration:revert": "pnpm typeorm migration:revert --dataSource src/db/data-source.ts",
+    "seed": "ts-node -r tsconfig-paths/register src/db/seeds/seed.ts"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.0",
