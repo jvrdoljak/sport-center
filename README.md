@@ -90,6 +90,11 @@ pnpm migration:generate src/db/migrations/[migration-name] --dataSource src/db/d
 
 Replace [migration-name]. E.g.: ```src/db/migrations/InitialMigration ```
 
+To seed data run 
+```bash 
+pnpm seed
+```
+
 ## Test
 
 ```bash
